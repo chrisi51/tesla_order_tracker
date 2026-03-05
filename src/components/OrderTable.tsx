@@ -691,9 +691,12 @@ export function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetC
   }, [orders, filters, sortField, sortDirection, countryLabelMap])
 
   // Notify parent of filtered orders (for statistics integration)
+  // Use ref to avoid re-triggering when callback identity changes
+  const onFilteredChangeRef = useRef(onFilteredOrdersChange)
+  onFilteredChangeRef.current = onFilteredOrdersChange
   useEffect(() => {
-    onFilteredOrdersChange?.(filteredAndSortedOrders)
-  }, [filteredAndSortedOrders, onFilteredOrdersChange])
+    onFilteredChangeRef.current?.(filteredAndSortedOrders)
+  }, [filteredAndSortedOrders])
 
   return (
     <div className="space-y-2">
