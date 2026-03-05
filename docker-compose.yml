@@ -8,6 +8,7 @@ services:
       - .env.production
     environment:
       - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
       - DATABASE_URL=file:/app/data/prod.db
     volumes:
       - sqlite_data:/app/data
@@ -32,6 +33,7 @@ services:
       - .env.staging
     environment:
       - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
       - DATABASE_URL=file:/app/data/staging.db
     volumes:
       - sqlite_data_staging:/app/data
