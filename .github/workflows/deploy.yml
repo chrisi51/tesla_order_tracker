@@ -15,8 +15,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tags }}
     steps:
       - uses: actions/checkout@v4
 
@@ -63,9 +61,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
             cd /opt/tesla-order-tracker
-            git fetch origin ${{ github.ref_name }}
-            git checkout ${{ github.ref_name }} -- docker-compose.yml
 
             # Determine which service to deploy
             if [ "${{ github.ref_name }}" = "master" ]; then
@@ -76,30 +73,38 @@ jobs:
               PORT=3001
             fi
 
-            # Pull the new image (NO building on VPS!)
+            echo ">>> Deploying $SERVICE from branch ${{ github.ref_name }}"
+
+            # Update docker-compose.yml from the pushed branch
+            git fetch origin ${{ github.ref_name }}
+            git checkout origin/${{ github.ref_name }} -- docker-compose.yml
+
+            # Log in and pull the new image (NEVER build on VPS)
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
             docker compose pull $SERVICE
 
-            # Tag current image for rollback
-            CURRENT_IMAGE=$(docker compose images $SERVICE -q 2>/dev/null | head -1)
-            if [ -n "$CURRENT_IMAGE" ]; then
-              docker tag "$CURRENT_IMAGE" tesla-order-tracker-${SERVICE}:rollback 2>/dev/null || true
-            fi
+            # Save current image ID for rollback
+            OLD_IMAGE=$(docker inspect tesla-order-tracker-${SERVICE}-1 --format '{{.Image}}' 2>/dev/null || echo "")
 
             # Restart only the target service
             docker compose up -d --no-deps $SERVICE
 
             # Wait for health check
-            echo "Waiting for health check on port $PORT..."
+            echo ">>> Waiting for health check on port $PORT..."
             for i in $(seq 1 30); do
               if wget -qO- http://localhost:$PORT/api/health 2>/dev/null | grep -q '"ok"'; then
-                echo "Health check passed!"
+                echo ">>> Health check passed!"
+                docker logout ghcr.io 2>/dev/null || true
                 exit 0
               fi
               sleep 2
             done
 
             # Rollback on failure
-            echo "Health check FAILED — rolling back"
-            docker compose up -d --no-deps $SERVICE
+            echo ">>> Health check FAILED — rolling back"
+            if [ -n "$OLD_IMAGE" ]; then
+              docker tag "$OLD_IMAGE" ghcr.io/svenger87/tesla_order_tracker:${{ github.ref_name }}
+              docker compose up -d --no-deps $SERVICE
+            fi
+            docker logout ghcr.io 2>/dev/null || true
             exit 1
