@@ -303,7 +303,6 @@ interface OrderTableProps {
   onGenerateResetCode?: (orderId: string, orderName: string) => void
   onEditByCode?: (order: Order) => void
   highlightOrderId?: string | null
-  onFilteredOrdersChange?: (orders: Order[]) => void
 }
 
 interface SortableHeaderProps {
@@ -394,7 +393,7 @@ const COLUMNS_STORAGE_KEY = 'tesla-tracker-table-columns'
 const FILTERS_STORAGE_KEY = 'tesla-tracker-table-filters'
 const SORT_STORAGE_KEY = 'tesla-tracker-table-sort'
 
-export function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, highlightOrderId, onFilteredOrdersChange }: OrderTableProps) {
+export function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, highlightOrderId }: OrderTableProps) {
   const t = useTranslations('table')
   const tc = useTranslations('common')
   const th = useTranslations('home')
@@ -689,14 +688,6 @@ export function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetC
 
     return result
   }, [orders, filters, sortField, sortDirection, countryLabelMap])
-
-  // Notify parent of filtered orders (for statistics integration)
-  // Use ref to avoid re-triggering when callback identity changes
-  const onFilteredChangeRef = useRef(onFilteredOrdersChange)
-  onFilteredChangeRef.current = onFilteredOrdersChange
-  useEffect(() => {
-    onFilteredChangeRef.current?.(filteredAndSortedOrders)
-  }, [filteredAndSortedOrders])
 
   return (
     <div className="space-y-2">
