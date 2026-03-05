@@ -293,7 +293,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               value={filters.drive || '_all'}
               onValueChange={(v) => setFilters(f => ({ ...f, drive: v === '_all' ? '' : v }))}
             >
-              <SelectTrigger className="w-[120px]">
+              <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder={t('driveDistribution')} />
               </SelectTrigger>
               <SelectContent>
