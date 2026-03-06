@@ -1,5 +1,5 @@
 /**
- * Startup schema migration: copies any missing tables from schema-template.db to prod.db.
+ * Startup schema migration: syncs tables, columns, and indexes from schema-template.db to prod.db.
  * Runs before server.js on every container start. Safe to run repeatedly.
  */
 import Database from 'better-sqlite3'
@@ -31,12 +31,36 @@ const prodTableNames = new Set(
   prod.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map(r => r.name)
 )
 
-let created = 0
+let createdTables = 0
+let addedColumns = 0
+
 for (const table of templateTables) {
   if (!prodTableNames.has(table.name)) {
     console.log(`[migrate] Creating table: ${table.name}`)
     prod.exec(table.sql)
-    created++
+    createdTables++
+  } else {
+    // Table exists — check for missing columns
+    const templateCols = template.prepare(`PRAGMA table_info("${table.name}")`).all()
+    const prodCols = new Set(
+      prod.prepare(`PRAGMA table_info("${table.name}")`).all().map(c => c.name)
+    )
+
+    for (const col of templateCols) {
+      if (!prodCols.has(col.name)) {
+        // Build ALTER TABLE ADD COLUMN statement
+        let colDef = `"${col.name}" ${col.type}`
+        if (col.notnull && col.dflt_value !== null) {
+          colDef += ` NOT NULL DEFAULT ${col.dflt_value}`
+        } else if (col.notnull) {
+          colDef += ` NOT NULL DEFAULT ''`
+        }
+        // Don't add NOT NULL without default for nullable columns
+        console.log(`[migrate] Adding column: ${table.name}.${col.name}`)
+        prod.exec(`ALTER TABLE "${table.name}" ADD COLUMN ${colDef}`)
+        addedColumns++
+      }
+    }
   }
 }
 
@@ -58,8 +82,8 @@ for (const idx of templateIndexes) {
 template.close()
 prod.close()
 
-if (created > 0) {
-  console.log(`[migrate] Created ${created} new table(s).`)
+if (createdTables > 0 || addedColumns > 0) {
+  console.log(`[migrate] Created ${createdTables} table(s), added ${addedColumns} column(s).`)
 } else {
   console.log('[migrate] Schema up to date.')
 }
