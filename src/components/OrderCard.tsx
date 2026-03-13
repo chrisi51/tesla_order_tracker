@@ -128,7 +128,7 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
                       {tc('edit')}
                     </DropdownMenuItem>
                   )}
-                  {onGenerateResetCode && (
+                  {onGenerateResetCode && order.source !== 'tost' && (
                     <DropdownMenuItem onClick={() => onGenerateResetCode(order.id, order.name)}>
                       <KeyRound className="mr-2 h-4 w-4" />
                       {th('generateResetCode')}
