@@ -12,7 +12,11 @@ import { DeliveryTimelineChart } from './DeliveryTimelineChart'
 import { WaitTimeDistributionChart } from './WaitTimeDistributionChart'
 import { VinWeekdayChart } from './VinWeekdayChart'
 import { MiniPieChart } from './ConfigDistributionCharts'
+import { DeliveryTrendChart } from './DeliveryTrendChart'
+import { ConfigDeliveryInsights } from './ConfigDeliveryInsights'
+import { VinActivityChart } from './VinActivityChart'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Select,
@@ -38,6 +42,8 @@ import {
   Package,
   Filter,
   X,
+  Zap,
+  MapPin,
 } from 'lucide-react'
 
 interface StatisticsDashboardProps {
@@ -175,10 +181,10 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="space-y-6"
+      className="space-y-8"
     >
       {/* Filter Bar - Only applies to charts */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 bg-muted/30 rounded-xl p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4">
             {/* Vehicle Type Selector */}
@@ -336,37 +342,42 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
 
       {/* Main Statistics Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-5 gap-1">
-          <TabsTrigger value="overview" className="flex items-center gap-1 text-xs sm:text-sm">
+        <TabsList className="flex w-full overflow-x-auto flex-nowrap gap-1 sm:grid sm:grid-cols-6">
+          <TabsTrigger value="overview" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <BarChart3 className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('overviewShort')}</span>
             <span className="hidden sm:inline">{t('overview')}</span>
           </TabsTrigger>
-          <TabsTrigger value="config" className="flex items-center gap-1 text-xs sm:text-sm">
+          <TabsTrigger value="config" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <Car className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('configurationShort')}</span>
             <span className="hidden sm:inline">{t('configuration')}</span>
           </TabsTrigger>
-          <TabsTrigger value="ausstattung" className="flex items-center gap-1 text-xs sm:text-sm">
+          <TabsTrigger value="ausstattung" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <Settings2 className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('equipmentShort')}</span>
             <span className="hidden sm:inline">{t('equipment')}</span>
           </TabsTrigger>
-          <TabsTrigger value="geo" className="flex items-center gap-1 text-xs sm:text-sm">
+          <TabsTrigger value="geo" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <Globe className="h-4 w-4 shrink-0" />
             <span>{t('geo')}</span>
           </TabsTrigger>
-          <TabsTrigger value="timeline" className="flex items-center gap-1 text-xs sm:text-sm">
+          <TabsTrigger value="timeline" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <TrendingUp className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('timelineShort')}</span>
             <span className="hidden sm:inline">{t('timeline')}</span>
           </TabsTrigger>
+          <TabsTrigger value="speed" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
+            <Zap className="h-4 w-4 shrink-0" />
+            <span className="sm:hidden">{t('speedShort')}</span>
+            <span className="hidden sm:inline">{t('speed')}</span>
+          </TabsTrigger>
         </TabsList>
 
         {/* Tab 1: Overview */}
-        <TabsContent value="overview" className="mt-6 space-y-4">
+        <TabsContent value="overview" className="mt-6 space-y-5">
           {/* Stats Overview */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
             <StatCard
               label={t('total')}
               value={stats.totalOrders}
@@ -375,6 +386,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               hint={t('hintTotal')}
               variant="hero"
               delay={0}
+              watermark
             />
             <StatCard
               label={t('delivered')}
@@ -384,6 +396,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               hint={t('hintDelivered')}
               variant="hero"
               delay={0.1}
+              watermark
             />
             <StatCard
               label={t('pending')}
@@ -403,7 +416,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
           </div>
 
           {/* Additional Time Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
             <StatCard
               label={t('avgOrderToVin')}
               value={stats.avgOrderToVin !== null ? `${stats.avgOrderToVin} ${tc('days')}` : '-'}
@@ -462,90 +475,171 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
         {/* Tab 4: Geodaten - Länder, Lieferorte */}
         <TabsContent value="geo" className="mt-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Globe className="h-5 w-5 text-primary" />
+            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                  <div className="rounded-lg bg-primary/10 p-1.5">
+                    <Globe className="h-4 w-4 text-primary" />
+                  </div>
                   {t('countryDistribution')}
                 </CardTitle>
                 <CardDescription>{t('topCountries')}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <CountryDistributionChart data={stats.countryDistribution} />
               </CardContent>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Package className="h-5 w-5 text-primary" />
+            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                  <div className="rounded-lg bg-primary/10 p-1.5">
+                    <Package className="h-4 w-4 text-primary" />
+                  </div>
                   {t('deliveryLocations')}
                 </CardTitle>
                 <CardDescription>{t('topLocations')}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <CountryDistributionChart data={stats.deliveryLocationDistribution.slice(0, 10)} />
               </CardContent>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
           </div>
+
+          {/* Country delivery speed ranking */}
+          {stats.countryDeliveryStats.length > 0 && (
+            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow mt-6">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                  <div className="rounded-lg bg-primary/10 p-1.5">
+                    <MapPin className="h-4 w-4 text-primary" />
+                  </div>
+                  {tc('countryDelivery' as 'all') || 'Delivery Speed by Country'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>#</TableHead>
+                      <TableHead>{t('countryDistribution')}</TableHead>
+                      <TableHead className="text-right tabular-nums">{t('avgDeliveryTime')}</TableHead>
+                      <TableHead className="text-right tabular-nums">Median</TableHead>
+                      <TableHead className="text-right tabular-nums">{t('orders')}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {stats.countryDeliveryStats.map((row, i) => (
+                      <TableRow key={row.country}>
+                        <TableCell className="font-medium tabular-nums">{i + 1}</TableCell>
+                        <TableCell>{row.country}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.avgDays}d</TableCell>
+                        <TableCell className="text-right tabular-nums font-medium">{row.medianDays}d</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.count}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+            </Card>
+          )}
         </TabsContent>
 
         {/* Tab 5: Timeline & Wait Times */}
-        <TabsContent value="timeline" className="mt-6 space-y-6">
+        <TabsContent value="timeline" className="mt-6 space-y-8">
+          {/* Delivery Trend Radar */}
+          <DeliveryTrendChart orders={filteredOrders} />
+
           {/* Timeline charts */}
           <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="h-5 w-5 text-primary" />
+            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                  <div className="rounded-lg bg-primary/10 p-1.5">
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                  </div>
                   {t('ordersOverTime')}
                 </CardTitle>
                 <CardDescription>{t('ordersPerMonth')}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <OrdersTimelineChart data={stats.ordersOverTime} />
               </CardContent>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                  <div className="rounded-lg bg-green-500/10 p-1.5">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  </div>
                   {t('deliveriesOverTime')}
                 </CardTitle>
                 <CardDescription>{t('deliveriesPerMonth')}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <DeliveryTimelineChart data={stats.deliveriesOverTime} />
               </CardContent>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
           </div>
 
           {/* VIN weekday distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Calendar className="h-5 w-5 text-primary" />
+          <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                <div className="rounded-lg bg-primary/10 p-1.5">
+                  <Calendar className="h-4 w-4 text-primary" />
+                </div>
                 {t('vinWeekday')}
               </CardTitle>
               <CardDescription>{t('vinWeekdayDescription')}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
               <VinWeekdayChart data={stats.vinWeekdayDistribution} />
             </CardContent>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
           </Card>
 
+          {/* VIN Activity */}
+          <VinActivityChart orders={filteredOrders} />
+
           {/* Wait time distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Hourglass className="h-5 w-5 text-primary" />
+          <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                <div className="rounded-lg bg-primary/10 p-1.5">
+                  <Hourglass className="h-4 w-4 text-primary" />
+                </div>
                 {t('waitTimeDistribution')}
               </CardTitle>
               <CardDescription>{t('waitTimeDescription')}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
               <WaitTimeDistributionChart data={stats.waitTimeDistribution} />
             </CardContent>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+          </Card>
+        </TabsContent>
+
+        {/* Tab 6: Speed - Config Delivery Insights */}
+        <TabsContent value="speed" className="mt-6">
+          <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+                <div className="rounded-lg bg-primary/10 p-1.5">
+                  <Zap className="h-4 w-4 text-primary" />
+                </div>
+                {t('speed')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
+              <ConfigDeliveryInsights orders={filteredOrders} />
+            </CardContent>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
           </Card>
         </TabsContent>
       </Tabs>

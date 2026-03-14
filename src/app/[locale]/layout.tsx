@@ -34,12 +34,31 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
+  const baseUrl = 'https://tff-order-stats.de'
+
   return {
     title: t('title'),
     description: t('description'),
     icons: {
       icon: "/favicon.webp",
       apple: "/favicon.webp",
+    },
+    metadataBase: new URL(baseUrl),
+    openGraph: {
+      title: t('title'),
+      description: t('description'),
+      url: baseUrl,
+      siteName: 'TFF Order Stats',
+      type: 'website',
+      locale: locale === 'de' ? 'de_DE' : 'en_US',
+    },
+    twitter: {
+      card: 'summary',
+      title: t('title'),
+      description: t('description'),
+    },
+    other: {
+      'application-name': 'TFF Order Stats',
     },
   };
 }
@@ -70,6 +89,21 @@ export default async function LocaleLayout({
             strategy="afterInteractive"
           />
         )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'TFF Order Stats',
+              url: 'https://tff-order-stats.de',
+              description: 'Community-driven Tesla order tracking and delivery statistics',
+              applicationCategory: 'UtilityApplication',
+              operatingSystem: 'Web',
+              offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+            }),
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

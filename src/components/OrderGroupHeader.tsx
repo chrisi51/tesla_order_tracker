@@ -16,22 +16,25 @@ export function OrderGroupHeader({ label, total, delivered, pending }: OrderGrou
   return (
     <div className="flex items-center justify-between w-full pr-4">
       <div className="flex items-center gap-3">
-        <span className="text-lg font-semibold">{label}</span>
-        <Badge variant="secondary" className="font-mono">
+        <span className="text-lg font-bold tracking-tight">{label}</span>
+        <Badge variant="secondary" className="font-mono tabular-nums text-xs">
           {total}
         </Badge>
       </div>
-      <div className="flex items-center gap-4 text-sm">
-        <div className="flex items-center gap-1.5 text-green-500">
-          <CheckCircle2 className="h-4 w-4" />
-          <span>{delivered}</span>
+      <div className="flex items-center gap-3 sm:gap-4 text-sm">
+        <div className="flex items-center gap-1.5">
+          <CheckCircle2 className="h-4 w-4 text-green-500" />
+          <span className="font-medium tabular-nums text-green-600 dark:text-green-400">{delivered}</span>
         </div>
-        <div className="flex items-center gap-1.5 text-muted-foreground">
-          <Clock className="h-4 w-4" />
-          <span>{pending}</span>
+        <div className="flex items-center gap-1.5">
+          <Clock className="h-4 w-4 text-amber-500" />
+          <span className="font-medium tabular-nums text-amber-600 dark:text-amber-400">{pending}</span>
         </div>
         {delivered > 0 && (
-          <Badge variant={deliveryRate >= 50 ? 'default' : 'outline'} className="ml-2">
+          <Badge
+            variant={deliveryRate >= 50 ? 'default' : 'outline'}
+            className="ml-1 tabular-nums font-semibold"
+          >
             {deliveryRate}%
           </Badge>
         )}

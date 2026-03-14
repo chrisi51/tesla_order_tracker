@@ -321,7 +321,9 @@
     "filterNote": "Diese Filter gelten nur für die Statistiken und Diagramme, nicht für die Tabelle.",
     "allModels": "Alle Models",
     "allColors": "Alle Farben",
-    "allDrives": "Alle Antriebe"
+    "allDrives": "Alle Antriebe",
+    "speed": "Geschwindigkeit",
+    "speedShort": "Speed"
   },
   "admin": {
     "dashboard": "Admin Dashboard",
@@ -549,5 +551,64 @@
     "disclaimerText": "Dies ist ein privates Community-Projekt ohne kommerzielle Absicht.",
     "backToHome": "Zurück zur Startseite",
     "revealEmail": "[Klicken zum Anzeigen]"
+  },
+  "trust": {
+    "totalOrders": "Erfasste Bestellungen",
+    "delivered": "Ausgeliefert",
+    "avgDeliveryTime": "Ø Lieferzeit",
+    "communitySince": "Community seit",
+    "days": "Tage"
+  },
+  "prediction": {
+    "title": "Lieferzeit-Prognose",
+    "description": "Wann kommt dein Tesla? Berechne eine Schätzung basierend auf Community-Daten.",
+    "selectVehicle": "Fahrzeug wählen",
+    "selectModel": "Modell wählen",
+    "selectCountry": "Land wählen",
+    "selectDrive": "Antrieb wählen",
+    "orderDatePlaceholder": "Bestelldatum (TT.MM.JJJJ)",
+    "optimistic": "Optimistisch",
+    "expected": "Erwartet",
+    "pessimistic": "Pessimistisch",
+    "confidence": {
+      "high": "Hohe Konfidenz",
+      "medium": "Mittlere Konfidenz",
+      "low": "Niedrige Konfidenz"
+    },
+    "basedOn": "Basierend auf {count} Bestellungen",
+    "notEnoughData": "Nicht genügend Daten für eine Prognose. Wähle ein Fahrzeug aus."
+  },
+  "trend": {
+    "title": "Lieferzeit-Trend",
+    "description": "Lieferzeiten sind {percent}% {direction} als vor 3 Monaten",
+    "accelerating": "schneller",
+    "decelerating": "langsamer",
+    "stable": "stabil",
+    "avgDeliveryTime": "Ø Lieferzeit"
+  },
+  "speed": {
+    "title": "Liefergeschwindigkeit",
+    "description": "Welche Konfigurationen werden am schnellsten geliefert?",
+    "byModel": "Nach Modell",
+    "byColor": "Nach Farbe",
+    "byDrive": "Nach Antrieb",
+    "byCountry": "Nach Land",
+    "fastest": "Schnellste",
+    "medianWait": "Median Wartezeit",
+    "noData": "Nicht genügend Daten verfügbar"
+  },
+  "vinActivity": {
+    "title": "VIN-Aktivität",
+    "description": "Wöchentliche VIN-Zuweisungen",
+    "thisWeek": "diese Woche",
+    "assigned": "zugewiesen"
+  },
+  "countryDelivery": {
+    "title": "Liefergeschwindigkeit nach Land",
+    "description": "Ranking der Länder nach medianer Lieferzeit",
+    "country": "Land",
+    "avgWait": "Ø Wartezeit",
+    "medianWait": "Median",
+    "orders": "Bestellungen"
   }
 }

@@ -64,9 +64,9 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
   }
 
   return (
-    <Card className="relative overflow-hidden">
+    <Card className="relative overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-200 hover:border-primary/20">
         {/* Status bar at top */}
-        <div className="h-1.5">
+        <div className="h-2">
           <OrderProgressBar order={order} compact barOnly />
         </div>
 
@@ -92,7 +92,7 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
           {/* Header row: Name + Admin menu */}
           <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-base truncate">
+              <h3 className="font-semibold text-lg tracking-tight truncate">
                 {order.name}
                 {order.source === 'tost' && (
                   <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
@@ -157,9 +157,9 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
           </div>
 
           {/* Car config badges */}
-          <div className="flex flex-wrap gap-1.5 mb-3">
+          <div className="flex flex-wrap gap-2 mb-3">
             {order.vehicleType && (
-              <Badge variant="outline" className="text-xs font-semibold">
+              <Badge variant="default" className="text-xs font-bold">
                 {order.vehicleType === 'Model Y' ? 'MY' : order.vehicleType === 'Model 3' ? 'M3' : order.vehicleType}
               </Badge>
             )}
@@ -215,22 +215,22 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
           </div>
 
           {/* Key details grid */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm">
             {order.vin && (
               <div className="col-span-2 flex items-center gap-2">
-                <Hash className="h-3 w-3 text-muted-foreground shrink-0" />
+                <Hash className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <span className="font-mono text-xs truncate">{order.vin}</span>
               </div>
             )}
             {order.deliveryLocation && (
               <div className="flex items-center gap-2">
-                <MapPin className="h-3 w-3 text-muted-foreground shrink-0" />
+                <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <span className="truncate">{order.deliveryLocation}</span>
               </div>
             )}
             {order.deliveryWindow && (
               <div className="flex items-center gap-2">
-                <Car className="h-3 w-3 text-muted-foreground shrink-0" />
+                <Car className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <span className="truncate text-xs">{order.deliveryWindow}</span>
               </div>
             )}
@@ -239,7 +239,7 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
           {/* Delivery status */}
           {order.deliveryDate && (
             <div className="mt-3 pt-3 border-t">
-              <Badge variant="default" className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500 text-white">
+              <Badge variant="default" className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500 text-white shadow-sm shadow-green-600/20">
                 {th('delivered', { date: order.deliveryDate })}
               </Badge>
             </div>

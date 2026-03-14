@@ -64,14 +64,14 @@ export function CollapsibleOrderSection({
   }
 
   return (
-    <Accordion type="multiple" value={value} onValueChange={onValueChange} className="space-y-3">
+    <Accordion type="multiple" value={value} onValueChange={onValueChange} className="space-y-4">
       {groupStats.map(({ group, stats }) => (
         <AccordionItem
           key={group.label}
           value={group.label}
-          className="border rounded-lg bg-card overflow-hidden"
+          className="border rounded-xl bg-card overflow-hidden shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]"
         >
-          <AccordionTrigger className="px-4 py-3 hover:bg-muted/50 hover:no-underline">
+          <AccordionTrigger className="px-4 py-3.5 hover:bg-muted/30 hover:no-underline transition-colors">
             <OrderGroupHeader
               label={group.label}
               total={stats.total}

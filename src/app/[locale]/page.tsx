@@ -10,12 +10,17 @@ import { OrderSearch } from '@/components/OrderSearch'
 import { EditCodeModal } from '@/components/EditCodeModal'
 import { PasswordPromptModal } from '@/components/PasswordPromptModal'
 import { DonationBanner } from '@/components/DonationBanner'
+import { TrustSignals } from '@/components/TrustSignals'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { Button } from '@/components/ui/button'
 
 const StatisticsDashboard = dynamic(
   () => import('@/components/statistics/StatisticsDashboard').then(mod => mod.StatisticsDashboard),
+  { ssr: false }
+)
+const DeliveryPrediction = dynamic(
+  () => import('@/components/statistics/DeliveryPrediction').then(mod => mod.DeliveryPrediction),
   { ssr: false }
 )
 const OrderForm = dynamic(
@@ -220,14 +225,14 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header
-        className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg"
+        className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg shadow-sm"
       >
         <div className="h-0.5 bg-gradient-to-r from-primary via-primary/80 to-primary/40" />
         <div className="w-full max-w-[98vw] mx-auto px-3 py-3 sm:px-4 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
-                className="relative rounded-lg bg-primary p-1.5 w-[38px] h-[44px] transition-transform hover:scale-105"
+                className="relative rounded-lg bg-primary p-1.5 w-[38px] h-[44px] transition-transform hover:scale-105 shadow-md shadow-primary/20"
               >
                 <Image
                   src="/logo.webp"
@@ -238,11 +243,11 @@ export default function Home() {
                 />
               </div>
               <div>
-                <h1 className="text-xl font-bold md:text-2xl">
+                <h1 className="text-xl font-bold tracking-tight md:text-2xl">
                   <span className="sm:hidden">{t('titleShort')}</span>
                   <span className="hidden sm:inline">{t('title')}</span>
                 </h1>
-                <p className="hidden text-sm text-muted-foreground sm:block">
+                <p className="hidden text-sm text-muted-foreground/80 sm:block">
                   {t('subtitle')}
                 </p>
               </div>
@@ -277,12 +282,14 @@ export default function Home() {
                   <span className="sr-only">GitHub</span>
                 </Button>
               </a>
+              {/* Separator between nav groups */}
+              <div className="hidden sm:block w-px h-5 bg-border mx-1" />
               {/* Desktop search button */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowSearch(true)}
-                className="hidden sm:inline-flex gap-2 text-muted-foreground"
+                className="hidden sm:inline-flex gap-2 text-muted-foreground border-input/60 bg-muted/30 hover:bg-muted/50"
               >
                 <Search className="h-4 w-4" />
                 {ts('openSearch')}
@@ -359,7 +366,7 @@ export default function Home() {
               {/* Desktop admin button */}
               {isAdmin ? (
                 <Link href="/admin" className="hidden sm:inline-flex">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="border-primary/30 text-primary hover:bg-primary/5">
                     Admin Dashboard
                   </Button>
                 </Link>
@@ -378,6 +385,11 @@ export default function Home() {
 
       <main className="w-full max-w-[98vw] mx-auto px-4 py-6 space-y-8">
         {/* Statistics Toggle & Dashboard */}
+        {/* Trust Signals - always visible */}
+        {!loading && orders.length > 0 && (
+          <TrustSignals orders={orders} />
+        )}
+
         <div className="flex items-center justify-between">
           <Button
             variant="outline"
@@ -392,7 +404,11 @@ export default function Home() {
         </div>
 
         {showStats && !loading && (
-          <StatisticsDashboard orders={orders} />
+          <>
+            {/* Delivery Prediction */}
+            <DeliveryPrediction orders={orders} />
+            <StatisticsDashboard orders={orders} />
+          </>
         )}
 
         {/* Section Divider */}
@@ -453,31 +469,30 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t mt-12">
-        <div className="w-full max-w-[98vw] mx-auto px-4 py-6 sm:py-8">
-          <div
-            className="flex flex-col items-center gap-4"
-          >
+      <footer className="border-t mt-12 bg-muted/20">
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div className="w-full max-w-[98vw] mx-auto px-4 py-8 sm:py-12">
+          <div className="flex flex-col items-center gap-5">
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
               <a
                 href="https://github.com/svenger87/tesla_order_tracker"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors hover:underline underline-offset-4"
               >
                 <Github className="h-4 w-4" />
                 <span>GitHub</span>
               </a>
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors hover:underline underline-offset-4"
               >
                 <Code2 className="h-4 w-4" />
                 <span>API Docs</span>
               </Link>
               <Link
                 href="/impressum"
-                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors hover:underline underline-offset-4"
               >
                 Impressum
               </Link>
@@ -485,7 +500,7 @@ export default function Home() {
                 <DonationBanner settings={settings} />
               )}
             </div>
-            <p className="text-xs text-muted-foreground/60">
+            <p className="text-xs text-muted-foreground/50">
               {t('footer')}
             </p>
           </div>

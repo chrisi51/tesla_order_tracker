@@ -65,6 +65,7 @@ export interface OrderStatistics {
   colorDistribution: { name: string; count: number; fill: string }[]
   deliveryLocationDistribution: { name: string; count: number; fill: string }[]
   vinWeekdayDistribution: { name: string; count: number }[]
+  countryDeliveryStats: { country: string; avgDays: number; medianDays: number; count: number }[]
 }
 
 // Period filter types
@@ -234,7 +235,7 @@ function calculateAverage(values: (number | null)[]): number | null {
   return Math.round(sum / validValues.length)
 }
 
-function parseGermanDate(dateStr: string | null): Date | null {
+export function parseGermanDate(dateStr: string | null): Date | null {
   if (!dateStr) return null
   // Format: DD.MM.YYYY
   const parts = dateStr.split('.')
@@ -248,7 +249,7 @@ function parseGermanDate(dateStr: string | null): Date | null {
 
 // Calculate days between two German-format date strings
 // Returns null if either date is invalid or if the result would be negative
-function calculateDaysBetween(startDateStr: string | null, endDateStr: string | null): number | null {
+export function calculateDaysBetween(startDateStr: string | null, endDateStr: string | null): number | null {
   const startDate = parseGermanDate(startDateStr)
   const endDate = parseGermanDate(endDateStr)
   if (!startDate || !endDate) return null
@@ -556,6 +557,28 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     count: weekdayCounts[i],
   }))
 
+  // Country delivery speed stats (Phase 5)
+  const countryDeliveryMap: Record<string, number[]> = {}
+  deliveredOrdersList.forEach(order => {
+    const days = calculateDaysBetween(order.orderDate, order.deliveryDate)
+    if (days !== null) {
+      const country = normalizeCountry(order.country)
+      if (!countryDeliveryMap[country]) countryDeliveryMap[country] = []
+      countryDeliveryMap[country].push(days)
+    }
+  })
+  const countryDeliveryStats = Object.entries(countryDeliveryMap)
+    .filter(([, days]) => days.length >= 3)
+    .map(([country, days]) => {
+      const sorted = [...days].sort((a, b) => a - b)
+      const median = sorted.length % 2 === 0
+        ? Math.round((sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2)
+        : sorted[Math.floor(sorted.length / 2)]
+      const avg = Math.round(days.reduce((s, d) => s + d, 0) / days.length)
+      return { country, avgDays: avg, medianDays: median, count: days.length }
+    })
+    .sort((a, b) => a.medianDays - b.medianDays)
+
   return {
     totalOrders,
     deliveredOrders,
@@ -580,6 +603,7 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     colorDistribution,
     deliveryLocationDistribution,
     vinWeekdayDistribution,
+    countryDeliveryStats,
   }
 }
 

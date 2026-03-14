@@ -321,7 +321,9 @@
     "filterNote": "These filters only apply to statistics and charts, not to the table.",
     "allModels": "All models",
     "allColors": "All colors",
-    "allDrives": "All drives"
+    "allDrives": "All drives",
+    "speed": "Speed",
+    "speedShort": "Speed"
   },
   "admin": {
     "dashboard": "Admin Dashboard",
@@ -549,5 +551,64 @@
     "disclaimerText": "This is a private community project without commercial intent.",
     "backToHome": "Back to homepage",
     "revealEmail": "[Click to reveal]"
+  },
+  "trust": {
+    "totalOrders": "Tracked orders",
+    "delivered": "Delivered",
+    "avgDeliveryTime": "Avg delivery time",
+    "communitySince": "Community since",
+    "days": "days"
+  },
+  "prediction": {
+    "title": "Delivery Prediction",
+    "description": "When will your Tesla arrive? Calculate an estimate based on community data.",
+    "selectVehicle": "Select vehicle",
+    "selectModel": "Select model",
+    "selectCountry": "Select country",
+    "selectDrive": "Select drive",
+    "orderDatePlaceholder": "Order date (DD.MM.YYYY)",
+    "optimistic": "Optimistic",
+    "expected": "Expected",
+    "pessimistic": "Pessimistic",
+    "confidence": {
+      "high": "High confidence",
+      "medium": "Medium confidence",
+      "low": "Low confidence"
+    },
+    "basedOn": "Based on {count} orders",
+    "notEnoughData": "Not enough data for prediction. Select a vehicle type."
+  },
+  "trend": {
+    "title": "Delivery Trend",
+    "description": "Deliveries are {percent}% {direction} than 3 months ago",
+    "accelerating": "faster",
+    "decelerating": "slower",
+    "stable": "stable",
+    "avgDeliveryTime": "Avg delivery time"
+  },
+  "speed": {
+    "title": "Delivery Speed",
+    "description": "Which configurations deliver fastest?",
+    "byModel": "By model",
+    "byColor": "By color",
+    "byDrive": "By drive",
+    "byCountry": "By country",
+    "fastest": "Fastest",
+    "medianWait": "Median wait",
+    "noData": "Not enough data available"
+  },
+  "vinActivity": {
+    "title": "VIN Activity",
+    "description": "Weekly VIN assignments",
+    "thisWeek": "this week",
+    "assigned": "assigned"
+  },
+  "countryDelivery": {
+    "title": "Delivery Speed by Country",
+    "description": "Countries ranked by median delivery time",
+    "country": "Country",
+    "avgWait": "Avg wait",
+    "medianWait": "Median",
+    "orders": "Orders"
   }
 }

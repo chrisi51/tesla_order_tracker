@@ -56,7 +56,7 @@ const CompactProgressBar = memo(function CompactProgressBar({ order }: { order: 
                 <div
                   className={cn(
                     'relative flex items-center justify-center rounded-full transition-colors shrink-0',
-                    'h-6 w-6',
+                    'h-7 w-7',
                     isScheduledDelivery
                       ? 'bg-amber-500 text-white'
                       : isLastStep && isCompleted && !isScheduled
@@ -69,9 +69,9 @@ const CompactProgressBar = memo(function CompactProgressBar({ order }: { order: 
                   )}
                 >
                   {isCompleted && index < currentIndex && !isScheduledDelivery ? (
-                    <Check className="h-3 w-3" />
+                    <Check className="h-3.5 w-3.5" />
                   ) : (
-                    <Icon className="h-3 w-3" />
+                    <Icon className="h-3.5 w-3.5" />
                   )}
                 </div>
               </TooltipTrigger>
@@ -112,19 +112,19 @@ export function OrderProgressBar({ order, compact = false, barOnly = false }: Or
   if (barOnly) {
     const progress = ((currentIndex + 1) / STEPS.length) * 100
     const barColor = currentStatus === 'delivered'
-      ? 'bg-green-500'
+      ? 'bg-gradient-to-r from-green-500 to-green-400'
       : currentStatus === 'delivery_scheduled'
-        ? 'bg-amber-500'
+        ? 'bg-gradient-to-r from-amber-500 to-amber-400'
         : currentStatus === 'papers_received'
-          ? 'bg-blue-500'
+          ? 'bg-gradient-to-r from-blue-500 to-blue-400'
           : currentStatus === 'vin_received'
-            ? 'bg-cyan-500'
-            : 'bg-gray-400'
+            ? 'bg-gradient-to-r from-cyan-500 to-cyan-400'
+            : 'bg-gradient-to-r from-gray-400 to-gray-300'
 
     return (
-      <div className="h-full w-full bg-muted">
+      <div className="h-full w-full bg-muted/50 rounded-full overflow-hidden">
         <div
-          className={cn('h-full transition-[width] duration-500 ease-out', barColor)}
+          className={cn('h-full rounded-full transition-[width] duration-500 ease-out', barColor)}
           style={{ width: `${progress}%` }}
         />
       </div>
