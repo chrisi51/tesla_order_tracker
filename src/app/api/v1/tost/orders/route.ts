@@ -7,8 +7,10 @@ import { ApiOrder } from '@/lib/api-types'
 
 // POST /api/v1/tost/orders - Create a new TOST-managed order
 export const POST = withTostAuth(async (request: NextRequest) => {
+  let customId: string | undefined
   try {
     const body = await request.json()
+    customId = body.id
 
     if (!body.name?.trim()) {
       return ApiErrors.validationError('Validation failed', {
@@ -20,6 +22,8 @@ export const POST = withTostAuth(async (request: NextRequest) => {
 
     const order = await prisma.order.create({
       data: {
+        // Use TOST-provided ID if given, otherwise auto-generate
+        ...(body.id && { id: body.id }),
         name: body.name.trim(),
         vehicleType: body.vehicleType || 'Model Y',
         orderDate: body.orderDate || null,
@@ -56,29 +60,58 @@ export const POST = withTostAuth(async (request: NextRequest) => {
     console.error('TOST orders POST error:', error)
     const errorMsg = error instanceof Error ? error.message : 'Unknown error'
     if (errorMsg.includes('Unique constraint')) {
+      if (customId) {
+        return ApiErrors.conflict('An order with this ID already exists')
+      }
       return ApiErrors.conflict('An order with this name and date already exists')
     }
     return ApiErrors.serverError('Failed to create order')
   }
 })
 
-// GET /api/v1/tost/orders?name=xxx - Find orders by name
+// GET /api/v1/tost/orders - Find orders by id, name, or tostUserId
+// At least one filter is required: ?id=xxx or ?name=xxx or ?tostUserId=xxx
 export const GET = withTostAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
     const name = searchParams.get('name')
+    const tostUserId = searchParams.get('tostUserId')
 
-    if (!name) {
+    if (!id && !name && !tostUserId) {
       return ApiErrors.validationError('Validation failed', {
-        name: 'name query parameter is required',
+        filter: 'At least one filter is required: id, name, or tostUserId',
       })
     }
 
+    // If searching by ID, return single order directly
+    if (id) {
+      const order = await prisma.order.findUnique({
+        where: { id },
+        select: orderSelectFields,
+      })
+
+      if (!order) {
+        return createApiSuccessResponse([], { count: 0 })
+      }
+
+      const apiOrder: ApiOrder = {
+        ...order,
+        archivedAt: order.archivedAt?.toISOString() ?? null,
+        createdAt: order.createdAt.toISOString(),
+        updatedAt: order.updatedAt.toISOString(),
+      }
+
+      return createApiSuccessResponse([apiOrder], { count: 1 })
+    }
+
+    // Build where clause from provided filters
+    const where: Record<string, unknown> = { archived: false }
+    if (name) where.name = decodeURIComponent(name)
+    if (tostUserId) where.tostUserId = decodeURIComponent(tostUserId)
+
     const orders = await prisma.order.findMany({
-      where: {
-        name: decodeURIComponent(name),
-        archived: false,
-      },
+      where,
       orderBy: { createdAt: 'desc' },
       select: orderSelectFields,
     })

@@ -387,18 +387,32 @@ paths:
     get:
       tags:
         - TOST
-      summary: Find orders by username
+      summary: Find orders by ID, username, or TOST user ID
       description: |
-        Returns all non-archived orders matching the given username.
-        TOST uses this to find existing orders before claiming or creating new ones.
+        Returns orders matching the given filter(s). At least one filter is required.
+        Supports three filter modes:
+        - `id` — look up a specific order by its ID (e.g., TOST-generated hash of RN)
+        - `name` — find all orders for a username
+        - `tostUserId` — find all orders for a TOST user (Tesla account)
+
+        Filters can be combined. Returns an empty array if no orders match.
       operationId: tostFindOrders
       security:
         - TostApiKeyAuth: []
       parameters:
+        - name: id
+          in: query
+          description: Order ID (exact match, e.g., TOST-generated hash)
+          schema:
+            type: string
         - name: name
           in: query
-          required: true
           description: Username to search for (exact match)
+          schema:
+            type: string
+        - name: tostUserId
+          in: query
+          description: TOST user ID to search for (all orders for this Tesla account)
           schema:
             type: string
       responses:
@@ -426,12 +440,12 @@ paths:
               example:
                 success: true
                 data:
-                  - id: "clx123abc"
+                  - id: "tost_rn_hash_abc123"
                     name: "MaxMustermann"
                     vehicleType: "Model Y"
                     orderDate: "15.01.2025"
-                    source: null
-                    tostUserId: null
+                    source: "tost"
+                    tostUserId: "tost_user_abc123"
                 meta:
                   timestamp: "2026-03-13T10:30:00.000Z"
                   version: "v1"
@@ -450,6 +464,11 @@ paths:
       description: |
         Creates a new order with `source` automatically set to `"tost"`.
         No editCode is required. The order will be exclusively managed by TOST.
+
+        **Custom ID:** You can provide your own `id` (e.g., a hash of RN + cipher) instead
+        of letting the system generate one. This allows you to reconstruct the ID deterministically
+        and check if an order already exists via `GET /tost/orders?id=xxx`.
+        If an order with the given ID already exists, returns 409 Conflict.
       operationId: tostCreateOrder
       security:
         - TostApiKeyAuth: []
@@ -460,6 +479,7 @@ paths:
             schema:
               $ref: '#/components/schemas/TostCreateOrderRequest'
             example:
+              id: "tost_rn_hash_abc123"
               name: "MaxMustermann"
               vehicleType: "Model Y"
               orderDate: "15.01.2025"
@@ -488,13 +508,13 @@ paths:
                         properties:
                           id:
                             type: string
-                            description: Created order ID
+                            description: Order ID (your provided ID or auto-generated)
                           message:
                             type: string
               example:
                 success: true
                 data:
-                  id: "clx789ghi"
+                  id: "tost_rn_hash_abc123"
                   message: "Order created successfully"
                 meta:
                   timestamp: "2026-03-13T10:30:00.000Z"
@@ -1062,6 +1082,9 @@ components:
       required:
         - name
       properties:
+        id:
+          type: string
+          description: Custom order ID (e.g., hash of RN + cipher). If omitted, auto-generated. Must be unique.
         name:
           type: string
           description: Customer username (required)
