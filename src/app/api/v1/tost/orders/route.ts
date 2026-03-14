@@ -35,9 +35,7 @@ function buildOrderData(body: Record<string, unknown>) {
   }
 }
 
-// POST /api/v1/tost/orders - Create or auto-claim a TOST-managed order
-// If an order with the same name already exists, it will be claimed and updated
-// (TOST orderDate always overwrites the existing one)
+// POST /api/v1/tost/orders - Create a new TOST-managed order
 export const POST = withTostAuth(async (request: NextRequest) => {
   try {
     const body = await request.json()
@@ -48,37 +46,9 @@ export const POST = withTostAuth(async (request: NextRequest) => {
       })
     }
 
-    const name = (body.name as string).trim()
     const timePeriods = calculateTimePeriods(body)
     const orderData = buildOrderData(body)
 
-    // Check if an order with this name already exists (not yet TOST-claimed)
-    const existing = await prisma.order.findFirst({
-      where: { name, archived: false },
-      select: { id: true, source: true },
-    })
-
-    if (existing) {
-      // Auto-claim and update: TOST takes over, orderDate gets overwritten
-      const updated = await prisma.order.update({
-        where: { id: existing.id },
-        data: {
-          ...orderData,
-          source: 'tost',
-          ...timePeriods,
-        },
-        select: { id: true, updatedAt: true },
-      })
-
-      trackApiEvent({ name: 'tost-auto-claim-order', url: '/api/v1/tost/orders', data: { orderId: updated.id, vehicleType: body.vehicleType || 'Model Y' } })
-
-      return createApiSuccessResponse(
-        { id: updated.id, message: 'Existing order claimed and updated by TOST', claimed: true },
-        { status: 200 }
-      )
-    }
-
-    // No existing order — create new
     const order = await prisma.order.create({
       data: {
         ...(body.id && { id: body.id }),
@@ -91,7 +61,7 @@ export const POST = withTostAuth(async (request: NextRequest) => {
     trackApiEvent({ name: 'tost-create-order', url: '/api/v1/tost/orders', data: { orderId: order.id, vehicleType: body.vehicleType || 'Model Y', customId: !!body.id } })
 
     return createApiSuccessResponse(
-      { id: order.id, message: 'Order created successfully', claimed: false },
+      { id: order.id, message: 'Order created successfully' },
       { status: 201 }
     )
   } catch (error) {

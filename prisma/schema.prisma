@@ -46,7 +46,7 @@ model Order {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
-  @@unique([name, orderDate], name: "unique_name_orderDate")
+  @@index([name, orderDate])
   @@index([archived])
   @@index([vehicleType])
   @@index([source])
