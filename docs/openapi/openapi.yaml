@@ -669,8 +669,15 @@ paths:
                 tostUserId:
                   type: string
                   description: TOST's internal user identifier (optional)
+                newId:
+                  type: string
+                  description: |
+                    Replace the order's ID with a TOST-generated one (e.g., hash of RN + cipher).
+                    This re-keys the order so TOST can use deterministic IDs for claimed orders too.
+                    If omitted, the order keeps its original webapp-generated ID.
             example:
               tostUserId: "tost_user_abc123"
+              newId: "tost_rn_hash_def456"
       responses:
         '200':
           description: Order claimed successfully
