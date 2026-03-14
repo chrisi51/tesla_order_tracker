@@ -1,5 +1,19 @@
-import { Order } from './types'
+import { Order, MODEL_Y_TRIMS, MODEL_3_TRIMS, COLORS, DRIVES, COUNTRIES } from './types'
 import { parseGermanDate, calculateDaysBetween } from './statistics'
+
+// Resolve internal value to display label
+function resolveLabel(value: string, dimension: 'model' | 'color' | 'drive' | 'country'): string {
+  const allOptions: { value: string; label: string }[] = (() => {
+    switch (dimension) {
+      case 'model': return [...MODEL_Y_TRIMS, ...MODEL_3_TRIMS]
+      case 'color': return COLORS
+      case 'drive': return DRIVES
+      case 'country': return COUNTRIES
+    }
+  })()
+  const match = allOptions.find(o => o.value === value || o.label.toLowerCase() === value.toLowerCase())
+  return match?.label || value
+}
 
 export interface DeliveryPrediction {
   optimisticDays: number
@@ -184,15 +198,16 @@ export function calculateConfigInsights(
     const days = calculateDaysBetween(o.orderDate, o.deliveryDate)
     if (days === null) return
 
-    let key: string | null = null
+    let rawKey: string | null = null
     switch (dimension) {
-      case 'model': key = o.model; break
-      case 'color': key = o.color; break
-      case 'drive': key = o.drive; break
-      case 'country': key = o.country; break
+      case 'model': rawKey = o.model; break
+      case 'color': rawKey = o.color; break
+      case 'drive': rawKey = o.drive; break
+      case 'country': rawKey = o.country; break
     }
-    if (!key) return
+    if (!rawKey) return
 
+    const key = resolveLabel(rawKey, dimension)
     if (!groups[key]) groups[key] = []
     groups[key].push(days)
   })
