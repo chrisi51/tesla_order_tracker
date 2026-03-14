@@ -460,15 +460,23 @@ paths:
     post:
       tags:
         - TOST
-      summary: Create a TOST-managed order
+      summary: Create or auto-claim a TOST-managed order
       description: |
-        Creates a new order with `source` automatically set to `"tost"`.
-        No editCode is required. The order will be exclusively managed by TOST.
+        Creates a new order or auto-claims an existing one.
+
+        **Auto-claim:** If an order with the same `name` already exists (not archived),
+        it will be automatically claimed by TOST (`source` set to `"tost"`) and all fields
+        will be overwritten with the provided data — including `orderDate`.
+        The response includes `claimed: true` so TOST knows an existing order was taken over.
+
+        **New order:** If no matching order exists, a new one is created with `source` set to `"tost"`.
+        The response includes `claimed: false`.
 
         **Custom ID:** You can provide your own `id` (e.g., a hash of RN + cipher) instead
-        of letting the system generate one. This allows you to reconstruct the ID deterministically
-        and check if an order already exists via `GET /tost/orders?id=xxx`.
+        of letting the system generate one. Only used for new orders (not auto-claims, which keep the existing ID).
         If an order with the given ID already exists, returns 409 Conflict.
+
+        No editCode is required. The order will be exclusively managed by TOST.
       operationId: tostCreateOrder
       security:
         - TostApiKeyAuth: []
@@ -494,8 +502,37 @@ paths:
               seats: "5"
               tostUserId: "tost_user_abc123"
       responses:
+        '200':
+          description: Existing order auto-claimed and updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: Existing order ID (unchanged)
+                          message:
+                            type: string
+                          claimed:
+                            type: boolean
+                            description: true when an existing order was auto-claimed
+              example:
+                success: true
+                data:
+                  id: "cmlgpaj2c002s5oxugajnuxu3"
+                  message: "Existing order claimed and updated by TOST"
+                  claimed: true
+                meta:
+                  timestamp: "2026-03-14T10:30:00.000Z"
+                  version: "v1"
         '201':
-          description: Order created successfully
+          description: New order created
           content:
             application/json:
               schema:
@@ -511,13 +548,17 @@ paths:
                             description: Order ID (your provided ID or auto-generated)
                           message:
                             type: string
+                          claimed:
+                            type: boolean
+                            description: false when a new order was created
               example:
                 success: true
                 data:
                   id: "tost_rn_hash_abc123"
                   message: "Order created successfully"
+                  claimed: false
                 meta:
-                  timestamp: "2026-03-13T10:30:00.000Z"
+                  timestamp: "2026-03-14T10:30:00.000Z"
                   version: "v1"
         '400':
           $ref: '#/components/responses/ValidationError'
