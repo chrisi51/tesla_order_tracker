@@ -589,6 +589,57 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+    delete:
+      tags:
+        - TOST
+      summary: Delete a TOST-owned order
+      description: |
+        Permanently deletes an order that is owned by TOST (`source = "tost"`).
+        Returns 403 if the order is not TOST-managed.
+      operationId: tostDeleteOrder
+      security:
+        - TostApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Order ID to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order deleted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          message:
+                            type: string
+              example:
+                success: true
+                data:
+                  id: "tost_rn_hash_abc123"
+                  message: "Order deleted successfully"
+                meta:
+                  timestamp: "2026-03-14T10:30:00.000Z"
+                  version: "v1"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /tost/claim/{id}:
     post:
       tags:

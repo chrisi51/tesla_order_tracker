@@ -5,6 +5,38 @@ import { RouteContext } from '@/lib/api-auth'
 import { createApiSuccessResponse, ApiErrors } from '@/lib/api-response'
 import { calculateTimePeriods } from '@/lib/tost-helpers'
 
+// DELETE /api/v1/tost/orders/[id] - Delete a TOST-owned order
+export const DELETE = withTostAuth(
+  async (request: NextRequest, context: RouteContext<{ id: string }>) => {
+    try {
+      const { id } = await context.params
+
+      const order = await prisma.order.findUnique({
+        where: { id },
+        select: { id: true, source: true, name: true },
+      })
+
+      if (!order) {
+        return ApiErrors.notFound('Order')
+      }
+
+      if (order.source !== 'tost') {
+        return ApiErrors.forbidden('Only TOST-managed orders can be deleted via this endpoint.')
+      }
+
+      await prisma.order.delete({ where: { id } })
+
+      return createApiSuccessResponse({
+        id: order.id,
+        message: 'Order deleted successfully',
+      })
+    } catch (error) {
+      console.error('TOST orders DELETE error:', error)
+      return ApiErrors.serverError('Failed to delete order')
+    }
+  }
+)
+
 // PUT /api/v1/tost/orders/[id] - Update a TOST-owned order
 export const PUT = withTostAuth(
   async (request: NextRequest, context: RouteContext<{ id: string }>) => {
