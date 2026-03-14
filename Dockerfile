@@ -13,6 +13,8 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG UMAMI_WEBSITE_ID
+ENV UMAMI_WEBSITE_ID=${UMAMI_WEBSITE_ID}
 ENV NEXT_PRIVATE_WORKER_THREADS=2
 RUN npx prisma generate
 RUN npm run build

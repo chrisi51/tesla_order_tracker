@@ -64,8 +64,9 @@ export default async function LocaleLayout({
       <head>
         {process.env.UMAMI_WEBSITE_ID && (
           <Script
-            src="https://analytics.tff-order-stats.de/script.js"
+            src="/u/script.js"
             data-website-id={process.env.UMAMI_WEBSITE_ID}
+            data-host-url="/u"
             strategy="afterInteractive"
           />
         )}
