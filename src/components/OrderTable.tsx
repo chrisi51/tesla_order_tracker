@@ -1052,7 +1052,9 @@ export function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetC
                   <TableCell className="font-medium whitespace-nowrap">
                     {order.name}
                     {order.source === 'tost' && (
-                      <img src="/tost-badge.svg" alt="TOST" className="ml-1.5 inline-block h-4 w-auto align-middle" />
+                      <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
+                        <img src="/tost-badge.svg" alt="TOST" className="h-4 w-auto" />
+                      </a>
                     )}
                   </TableCell>
                 )}
