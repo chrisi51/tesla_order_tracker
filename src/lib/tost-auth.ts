@@ -69,12 +69,25 @@ export function withTostAuth<T extends unknown[]>(
 
     const response = await handler(request, ...args)
 
-    // Parse response for logging
+    // Parse response for logging (summarized — no full order data)
     let responseBody: Record<string, unknown> | undefined
     let responseStatus = response.status
     try {
       const cloned = response.clone()
-      responseBody = await cloned.json()
+      const json = await cloned.json()
+      // Keep success/error/meta but summarize data arrays
+      if (json.success && Array.isArray(json.data)) {
+        responseBody = {
+          success: json.success,
+          count: json.data.length,
+          ids: json.data.map((o: Record<string, unknown>) => o.id).filter(Boolean),
+          meta: json.meta,
+        }
+      } else if (json.success && json.data && typeof json.data === 'object') {
+        responseBody = { success: json.success, data: json.data, meta: json.meta }
+      } else {
+        responseBody = { success: json.success, error: json.error, meta: json.meta }
+      }
     } catch {
       // non-JSON response
     }
