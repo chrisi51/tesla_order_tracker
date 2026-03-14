@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo, memo, useEffect, useRef, useCallback } from 'react'
+import { useState, useMemo, memo, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Order, COLORS, COUNTRIES, MODEL_Y_TRIMS, MODEL_3_TRIMS } from '@/lib/types'
@@ -397,6 +398,7 @@ const FILTERS_STORAGE_KEY = 'tesla-tracker-table-filters'
 const SORT_STORAGE_KEY = 'tesla-tracker-table-sort'
 
 export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, highlightOrderId }: OrderTableProps) {
+  const isMobile = useIsMobile()
   const t = useTranslations('table')
   const tc = useTranslations('common')
   const th = useTranslations('home')
@@ -947,42 +949,44 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
         </div>
       )}
 
-      {/* Mobile Card View - visible on small screens */}
-      <div className="md:hidden space-y-3 px-1">
-        {filteredAndSortedOrders.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            {orders.length === 0 ? th('noOrders') : th('noFilterResults')}
-          </div>
-        ) : (
-          filteredAndSortedOrders.map((order) => (
-            <div
-              key={order.id}
-              data-order-id={order.id}
-              className={cn(
-                "rounded-lg transition-colors duration-500",
-                highlightOrderId === order.id && "ring-2 ring-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/20 animate-pulse"
-              )}
-            >
-              <OrderCard
-                order={order}
-                isAdmin={isAdmin}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onGenerateResetCode={onGenerateResetCode}
-                onEditByCode={onEditByCode}
-                onImageClick={setImageModalOrder}
-                options={{ models, ranges, drives, interiors, countries }}
-              />
+      {/* Mobile Card View - only rendered on small screens */}
+      {isMobile ? (
+        <div className="space-y-3 px-1">
+          {filteredAndSortedOrders.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              {orders.length === 0 ? th('noOrders') : th('noFilterResults')}
             </div>
-          ))
-        )}
-      </div>
+          ) : (
+            filteredAndSortedOrders.map((order) => (
+              <div
+                key={order.id}
+                data-order-id={order.id}
+                className={cn(
+                  "rounded-lg transition-colors duration-500",
+                  highlightOrderId === order.id && "ring-2 ring-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/20 animate-pulse"
+                )}
+              >
+                <OrderCard
+                  order={order}
+                  isAdmin={isAdmin}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onGenerateResetCode={onGenerateResetCode}
+                  onEditByCode={onEditByCode}
+                  onImageClick={setImageModalOrder}
+                  options={{ models, ranges, drives, interiors, countries }}
+                />
+              </div>
+            ))
+          )}
+        </div>
+      ) : null}
 
-      {/* Desktop Table View - hidden on small screens */}
-      <div
+      {/* Desktop Table View - only rendered on medium+ screens */}
+      {!isMobile ? (<><div
         ref={tableContainerRef}
         onScroll={handleTableScroll}
-        className="hidden md:block rounded-md border bg-card dark:bg-card w-full max-h-[70vh] overflow-auto scrollbar-hide-horizontal"
+        className="rounded-md border bg-card dark:bg-card w-full max-h-[70vh] overflow-auto scrollbar-hide-horizontal"
       >
         <table className="w-full min-w-max caption-bottom text-xs">
         <TableHeader className="sticky top-0 z-20">
@@ -1053,7 +1057,7 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
                     {order.name}
                     {order.source === 'tost' && (
                       <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
-                        <img src="/tost-badge.svg" alt="TOST" className="h-4 w-auto" />
+                        <img src="/tost-badge.svg" alt="TOST" className="h-6 w-auto" />
                       </a>
                     )}
                   </TableCell>
@@ -1287,12 +1291,13 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
         <div
           ref={scrollbarRef}
           onScroll={handleScrollbarScroll}
-          className="hidden md:block sticky bottom-0 z-30 overflow-x-auto overflow-y-hidden bg-background/80 backdrop-blur-sm border-t"
+          className="sticky bottom-0 z-30 overflow-x-auto overflow-y-hidden bg-background/80 backdrop-blur-sm border-t"
           style={{ height: '16px' }}
         >
           <div style={{ width: scrollWidth, height: '1px' }} />
         </div>
       )}
+      </>) : null}
 
       {/* Car image modal */}
       <Dialog open={!!imageModalOrder} onOpenChange={(open) => { if (!open) setImageModalOrder(null) }}>

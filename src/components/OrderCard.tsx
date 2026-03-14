@@ -96,7 +96,7 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
                 {order.name}
                 {order.source === 'tost' && (
                   <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
-                    <img src="/tost-badge.svg" alt="TOST" className="h-4 w-auto" />
+                    <img src="/tost-badge.svg" alt="TOST" className="h-8 w-auto" />
                   </a>
                 )}
               </h3>
