@@ -94,7 +94,7 @@ export function ConfigDeliveryInsights({ orders }: ConfigDeliveryInsightsProps) 
           <BarChart data={insight.values} layout="vertical" margin={{ left: 10, right: 20 }}>
             <CartesianGrid strokeDasharray="3 3" opacity={0.3} horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 11 }} label={{ value: tc('days'), position: 'insideBottom', style: { fontSize: 11 } }} />
-            <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 11 }} />
+            <YAxis dataKey="name" type="category" width={140} tick={{ fontSize: 11 }} />
             <Tooltip
               contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
               formatter={(value) => [`${value} ${tc('days')}`, t('medianWait')]}
