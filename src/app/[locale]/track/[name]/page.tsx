@@ -44,8 +44,9 @@ export async function generateMetadata({ params }: { params: Promise<{ name: str
   }
 }
 
-export default async function TrackPage({ params }: { params: Promise<{ name: string; locale: string }> }) {
+export default async function TrackPage({ params, searchParams }: { params: Promise<{ name: string; locale: string }>; searchParams: Promise<{ id?: string }> }) {
   const { name, locale } = await params
+  const { id: selectedId } = await searchParams
   setRequestLocale(locale)
   const decodedName = decodeURIComponent(name)
 
@@ -60,7 +61,15 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
   const orders = allOrders as unknown as Order[]
 
   // Filter case-insensitively in JS since SQLite LOWER() won't use index
-  const matches = orders.filter(o => o.name.toLowerCase() === decodedName.toLowerCase())
+  let matches = orders.filter(o => o.name.toLowerCase() === decodedName.toLowerCase())
+
+  // If a specific order ID is provided via ?id=, narrow to that single order
+  if (selectedId && matches.length > 1) {
+    const exactMatch = matches.find(o => o.id === selectedId)
+    if (exactMatch) {
+      matches = [exactMatch]
+    }
+  }
 
   // 0 matches: not found
   if (matches.length === 0) {
