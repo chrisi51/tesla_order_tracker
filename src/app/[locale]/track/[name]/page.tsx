@@ -52,13 +52,15 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
   const t = await getTranslations({ locale, namespace: 'tracking' })
   const tp = await getTranslations({ locale, namespace: 'progress' })
 
-  // Fetch all non-archived orders
-  const allOrders = await prisma.order.findMany({
-    where: { archived: false },
-  }) as unknown as Order[]
+  // Fetch all non-archived orders and settings
+  const [allOrders, settings] = await Promise.all([
+    prisma.order.findMany({ where: { archived: false } }),
+    prisma.settings.findFirst(),
+  ])
+  const orders = allOrders as unknown as Order[]
 
   // Filter case-insensitively in JS since SQLite LOWER() won't use index
-  const matches = allOrders.filter(o => o.name.toLowerCase() === decodedName.toLowerCase())
+  const matches = orders.filter(o => o.name.toLowerCase() === decodedName.toLowerCase())
 
   // 0 matches: not found
   if (matches.length === 0) {
@@ -175,7 +177,7 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
 
   // Delivery prediction
   const prediction = predictDelivery(
-    allOrders,
+    orders,
     order.vehicleType,
     order.model ?? undefined,
     order.country ?? undefined,
@@ -184,7 +186,7 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
   )
 
   // Similar orders with progressive relaxation
-  let similar = allOrders.filter(o =>
+  let similar = orders.filter(o =>
     o.vehicleType === order.vehicleType &&
     o.model === order.model &&
     o.deliveryDate &&
@@ -192,7 +194,7 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
   ).slice(0, 8)
 
   if (similar.length < 3) {
-    similar = allOrders.filter(o =>
+    similar = orders.filter(o =>
       o.vehicleType === order.vehicleType &&
       o.drive === order.drive &&
       o.deliveryDate &&
@@ -269,6 +271,7 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
       durationFields={durationFields}
       colorInfo={colorInfo ? { hex: colorInfo.hex, border: colorInfo.border } : null}
       countryInfo={countryInfo ? { label: countryInfo.label, flag: countryInfo.flag } : null}
+      donationUrl={settings?.donationUrl}
     />
   )
 }

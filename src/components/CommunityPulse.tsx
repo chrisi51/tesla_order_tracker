@@ -74,8 +74,8 @@ export function CommunityPulse() {
     {
       icon: Zap,
       value: data.vinsThisWeek,
-      label: 'VINs this week',
-      shortLabel: 'VINs',
+      label: t('vinsThisWeek'),
+      shortLabel: t('vinsShort'),
       color: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-amber-500/10',
     },

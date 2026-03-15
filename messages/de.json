@@ -561,7 +561,9 @@
     "delivered": "Ausgeliefert",
     "avgDeliveryTime": "Ø Lieferzeit",
     "communitySince": "Community seit",
-    "days": "Tage"
+    "days": "Tage",
+    "vinsThisWeek": "VINs diese Woche",
+    "vinsShort": "VINs"
   },
   "prediction": {
     "title": "Lieferzeit-Prognose",

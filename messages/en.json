@@ -561,7 +561,9 @@
     "delivered": "Delivered",
     "avgDeliveryTime": "Avg delivery time",
     "communitySince": "Community since",
-    "days": "days"
+    "days": "days",
+    "vinsThisWeek": "VINs this week",
+    "vinsShort": "VINs"
   },
   "prediction": {
     "title": "Delivery Prediction",

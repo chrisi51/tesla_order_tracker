@@ -15,8 +15,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreVertical, Pencil, Trash2, MapPin, Calendar, Car, Hash, KeyRound, FileText } from 'lucide-react'
+import { MoreVertical, Pencil, Trash2, MapPin, Calendar, Car, Hash, KeyRound, FileText, ExternalLink } from 'lucide-react'
 import { TwemojiEmoji } from '@/components/TwemojiText'
+import { Link } from '@/i18n/navigation'
 
 // Helper to find color info by label
 function findColorInfo(colorLabel: string | null) {
@@ -94,7 +95,12 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
           <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg tracking-tight truncate">
-                {order.name}
+                <Link
+                  href={`/track/${encodeURIComponent(order.name)}`}
+                  className="hover:text-primary transition-colors hover:underline underline-offset-2"
+                >
+                  {order.name}
+                </Link>
                 {order.source === 'tost' && (
                   <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
                     <img src="/tost-badge.svg" alt="TOST" className="h-8 w-auto" />

@@ -6,6 +6,7 @@ import { Order, VehicleType } from '@/lib/types'
 import { Link } from '@/i18n/navigation'
 import { ProgressTimeline } from '@/components/ProgressTimeline'
 import { SimilarOrders } from '@/components/SimilarOrders'
+import { SupportCard } from '@/components/SupportCard'
 import { TeslaCarImage } from '@/components/TeslaCarImage'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -33,6 +34,7 @@ interface TrackingPageClientProps {
   durationFields: { label: string; value: number | null }[]
   colorInfo: { hex: string; border: boolean } | null
   countryInfo: { label: string; flag: string } | null
+  donationUrl?: string | null
 }
 
 export function TrackingPageClient({
@@ -44,6 +46,7 @@ export function TrackingPageClient({
   durationFields,
   colorInfo,
   countryInfo,
+  donationUrl,
 }: TrackingPageClientProps) {
   const t = useTranslations('tracking')
   const [copied, setCopied] = useState(false)
@@ -288,6 +291,17 @@ export function TrackingPageClient({
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
+        )}
+
+        {/* Support card — post-value donation ask */}
+        {donationUrl && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <SupportCard donationUrl={donationUrl} />
           </motion.div>
         )}
 

@@ -3,6 +3,7 @@
 import { useState, useMemo, memo, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { useSearchParams } from 'next/navigation'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Order, COLORS, COUNTRIES, MODEL_Y_TRIMS, MODEL_3_TRIMS } from '@/lib/types'
 import { TwemojiEmoji } from '@/components/TwemojiText'
@@ -1060,7 +1061,12 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
                 )}
                 {isColumnVisible('name') && (
                   <TableCell className="font-medium whitespace-nowrap">
-                    {order.name}
+                    <Link
+                      href={`/track/${encodeURIComponent(order.name)}`}
+                      className="hover:text-primary transition-colors hover:underline underline-offset-2"
+                    >
+                      {order.name}
+                    </Link>
                     {order.source === 'tost' && (
                       <a href="https://www.tesla-order-status-tracker.de/" target="_blank" rel="noopener noreferrer" className="ml-1.5 inline-block align-middle hover:opacity-70 transition-opacity">
                         <img src="/tost-badge.svg" alt="TOST" className="h-8 w-auto" />
