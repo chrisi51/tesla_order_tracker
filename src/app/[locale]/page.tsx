@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { Order, Settings } from '@/lib/types'
 import { groupOrdersByQuarter } from '@/lib/groupOrders'
 import { CollapsibleOrderSection } from '@/components/CollapsibleOrderSection'
+import { TostFieldsModal } from '@/components/TostFieldsModal'
 import { OrderSearch } from '@/components/OrderSearch'
 import { EditCodeModal } from '@/components/EditCodeModal'
 import { PasswordPromptModal } from '@/components/PasswordPromptModal'
@@ -62,6 +63,7 @@ export default function Home() {
   const [editByCodePassword, setEditByCodePassword] = useState('')
   const [editByCodeIsLegacy, setEditByCodeIsLegacy] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [tostFieldsOrder, setTostFieldsOrder] = useState<Order | null>(null)
   const [showStats, setShowStats] = useState(true)
   // Search state
   const [showSearch, setShowSearch] = useState(false)
@@ -459,6 +461,7 @@ export default function Home() {
                 onDelete={(id) => setDeleteConfirm(id)}
                 onGenerateResetCode={isAdmin ? handleGenerateResetCode : undefined}
                 onEditByCode={!isAdmin ? handleEditByCode : undefined}
+                onEditTostFields={setTostFieldsOrder}
                 expandedQuarters={expandedQuarters}
                 onExpandedChange={setExpandedQuarters}
                 highlightOrderId={highlightOrderId}
@@ -539,6 +542,23 @@ export default function Home() {
           onSuccess={fetchOrders}
         />
       )}
+
+      <TostFieldsModal
+        order={tostFieldsOrder}
+        onClose={() => setTostFieldsOrder(null)}
+        onSave={async (orderId, data) => {
+          const res = await fetch('/api/orders', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: orderId, ...data }),
+          })
+          if (!res.ok) {
+            const err = await res.json()
+            throw new Error(err.error || 'Fehler beim Speichern')
+          }
+          fetchOrders()
+        }}
+      />
 
       {editingOrder && (
         <OrderForm

@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreVertical, Pencil, Trash2, MapPin, Calendar, Car, Hash, KeyRound } from 'lucide-react'
+import { MoreVertical, Pencil, Trash2, MapPin, Calendar, Car, Hash, KeyRound, FileText } from 'lucide-react'
 import { TwemojiEmoji } from '@/components/TwemojiText'
 
 // Helper to find color info by label
@@ -43,11 +43,12 @@ interface OrderCardProps {
   onDelete: (orderId: string) => void
   onGenerateResetCode?: (orderId: string, orderName: string) => void
   onEditByCode?: (order: Order) => void
+  onEditTostFields?: (order: Order) => void
   onImageClick?: (order: Order) => void
   options: OrderCardOptions
 }
 
-export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, onImageClick, options }: OrderCardProps) {
+export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, onEditTostFields, onImageClick, options }: OrderCardProps) {
   const t = useTranslations('table')
   const tc = useTranslations('common')
   const th = useTranslations('home')
@@ -128,6 +129,12 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
                       {tc('edit')}
                     </DropdownMenuItem>
                   )}
+                  {order.source === 'tost' && onEditTostFields && (
+                    <DropdownMenuItem onClick={() => onEditTostFields(order)}>
+                      <FileText className="mr-2 h-4 w-4" />
+                      Papiere / COC
+                    </DropdownMenuItem>
+                  )}
                   {onGenerateResetCode && order.source !== 'tost' && (
                     <DropdownMenuItem onClick={() => onGenerateResetCode(order.id, order.name)}>
                       <KeyRound className="mr-2 h-4 w-4" />
@@ -143,6 +150,16 @@ export function OrderCard({ order, isAdmin, onEdit, onDelete, onGenerateResetCod
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            ) : order.source === 'tost' && onEditTostFields ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 shrink-0"
+                onClick={() => onEditTostFields(order)}
+                title="Papiere / COC"
+              >
+                <FileText className="h-4 w-4" />
+              </Button>
             ) : order.source !== 'tost' ? (
               <Button
                 variant="ghost"

@@ -20,6 +20,7 @@ interface CollapsibleOrderSectionProps {
   onDelete: (orderId: string) => void
   onGenerateResetCode?: (orderId: string, orderName: string) => void
   onEditByCode?: (order: Order) => void
+  onEditTostFields?: (order: Order) => void
   expandedQuarters?: string[]
   onExpandedChange?: (vals: string[]) => void
   highlightOrderId?: string | null
@@ -32,6 +33,7 @@ export function CollapsibleOrderSection({
   onDelete,
   onGenerateResetCode,
   onEditByCode,
+  onEditTostFields,
   expandedQuarters,
   onExpandedChange,
   highlightOrderId,
@@ -88,6 +90,7 @@ export function CollapsibleOrderSection({
                 onDelete={onDelete}
                 onGenerateResetCode={onGenerateResetCode}
                 onEditByCode={onEditByCode}
+                onEditTostFields={onEditTostFields}
                 highlightOrderId={highlightOrderId}
               />
             </div>

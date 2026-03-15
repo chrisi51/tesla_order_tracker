@@ -74,12 +74,14 @@ export const PUT = withTostAuth(
 
       // Build update data from provided fields
       const updateData: Record<string, unknown> = {}
+      // papersReceivedDate, typeApproval, typeVariant excluded —
+      // TOST can't provide these, users edit them via the webapp
       const allowedFields = [
         'name', 'vehicleType', 'orderDate', 'country', 'model', 'range',
         'drive', 'color', 'interior', 'wheels', 'towHitch', 'autopilot',
         'seats', 'deliveryWindow', 'deliveryLocation', 'vin',
-        'vinReceivedDate', 'papersReceivedDate', 'productionDate',
-        'typeApproval', 'typeVariant', 'deliveryDate', 'tostUserId',
+        'vinReceivedDate', 'productionDate',
+        'deliveryDate', 'tostUserId',
       ]
 
       for (const field of allowedFields) {

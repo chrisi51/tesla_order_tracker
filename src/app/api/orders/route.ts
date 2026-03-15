@@ -331,10 +331,41 @@ export async function PUT(request: NextRequest) {
 
     const admin = await getAdminFromCookie()
 
-    // Check if order is TOST-managed (cannot be edited via webapp)
+    // TOST-managed orders: only papersReceivedDate, typeApproval, typeVariant can be edited via webapp
     const tostCheck = await prisma.order.findUnique({ where: { id }, select: { source: true } })
     if (tostCheck?.source === 'tost') {
-      return NextResponse.json({ error: 'This order is managed by TOST and cannot be edited here.' }, { status: 403 })
+      const tostUserEditableFields = ['papersReceivedDate', 'typeApproval', 'typeVariant']
+      const attemptedFields = Object.keys(rawData).filter(k => k !== 'id')
+      const disallowedFields = attemptedFields.filter(f => !tostUserEditableFields.includes(f))
+      if (disallowedFields.length > 0) {
+        return NextResponse.json({ error: 'This order is managed by TOST. Only papers received date, type approval, and type variant can be edited.' }, { status: 403 })
+      }
+      // Allow the edit — update only the allowed fields directly
+      const updateData: Record<string, unknown> = {}
+      for (const field of tostUserEditableFields) {
+        if (field in rawData) {
+          updateData[field] = rawData[field] || null
+        }
+      }
+      if (Object.keys(updateData).length > 0) {
+        // Recalculate papersToDelivery if papersReceivedDate changed
+        if (updateData.papersReceivedDate) {
+          const fullOrder = await prisma.order.findUnique({ where: { id }, select: { deliveryDate: true } })
+          if (fullOrder?.deliveryDate) {
+            const papersToDelivery = calculateDaysBetween(updateData.papersReceivedDate as string, fullOrder.deliveryDate)
+            if (papersToDelivery !== null) updateData.papersToDelivery = papersToDelivery
+          }
+          // Also recalculate orderToPapers
+          const orderData = await prisma.order.findUnique({ where: { id }, select: { orderDate: true } })
+          if (orderData?.orderDate) {
+            const orderToPapers = calculateDaysBetween(orderData.orderDate, updateData.papersReceivedDate as string)
+            if (orderToPapers !== null) updateData.orderToPapers = orderToPapers
+          }
+        }
+        const updated = await prisma.order.update({ where: { id }, data: updateData })
+        return NextResponse.json({ id: updated.id, updatedAt: updated.updatedAt, message: 'Order updated' })
+      }
+      return NextResponse.json({ message: 'No changes' })
     }
 
     // Check authorization - either admin or valid edit code

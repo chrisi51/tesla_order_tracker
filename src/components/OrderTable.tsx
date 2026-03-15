@@ -150,7 +150,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal, Pencil, Trash2, ArrowUp, ArrowDown, ArrowUpDown, Filter, X, Search, KeyRound, Columns3 } from 'lucide-react'
+import { MoreHorizontal, Pencil, Trash2, ArrowUp, ArrowDown, ArrowUpDown, Filter, X, Search, KeyRound, Columns3, FileText } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
   Popover,
@@ -305,6 +305,7 @@ interface OrderTableProps {
   onDelete: (orderId: string) => void
   onGenerateResetCode?: (orderId: string, orderName: string) => void
   onEditByCode?: (order: Order) => void
+  onEditTostFields?: (order: Order) => void
   highlightOrderId?: string | null
 }
 
@@ -397,7 +398,7 @@ const COLUMNS_STORAGE_KEY = 'tesla-tracker-table-columns'
 const FILTERS_STORAGE_KEY = 'tesla-tracker-table-filters'
 const SORT_STORAGE_KEY = 'tesla-tracker-table-sort'
 
-export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, highlightOrderId }: OrderTableProps) {
+export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, onDelete, onGenerateResetCode, onEditByCode, onEditTostFields, highlightOrderId }: OrderTableProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('table')
   const tc = useTranslations('common')
@@ -973,6 +974,7 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
                   onDelete={onDelete}
                   onGenerateResetCode={onGenerateResetCode}
                   onEditByCode={onEditByCode}
+                  onEditTostFields={onEditTostFields}
                   onImageClick={setImageModalOrder}
                   options={{ models, ranges, drives, interiors, countries }}
                 />
@@ -1252,6 +1254,12 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
                             {tc('edit')}
                           </DropdownMenuItem>
                         )}
+                        {order.source === 'tost' && onEditTostFields && (
+                          <DropdownMenuItem onClick={() => onEditTostFields(order)}>
+                            <FileText className="mr-2 h-4 w-4" />
+                            {t('editTostFields') || 'Papiere / COC bearbeiten'}
+                          </DropdownMenuItem>
+                        )}
                         {onGenerateResetCode && order.source !== 'tost' && (
                           <DropdownMenuItem onClick={() => onGenerateResetCode(order.id, order.name)}>
                             <KeyRound className="mr-2 h-4 w-4" />
@@ -1267,6 +1275,16 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                  ) : order.source === 'tost' && onEditTostFields ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => onEditTostFields(order)}
+                      title={t('editTostFields') || 'Papiere / COC bearbeiten'}
+                    >
+                      <FileText className="h-4 w-4" />
+                    </Button>
                   ) : order.source !== 'tost' ? (
                     <Button
                       variant="ghost"
