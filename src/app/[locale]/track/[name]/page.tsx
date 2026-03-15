@@ -278,7 +278,7 @@ export default async function TrackPage({ params }: { params: Promise<{ name: st
       fasterPercent={fasterPercent}
       detailFields={detailFields}
       durationFields={durationFields}
-      colorInfo={colorInfo ? { hex: colorInfo.hex, border: colorInfo.border } : null}
+      colorInfo={colorInfo ? { hex: colorInfo.hex, border: colorInfo.border, label: colorInfo.label } : null}
       countryInfo={countryInfo ? { label: countryInfo.label, flag: countryInfo.flag } : null}
       donationUrl={settings?.donationUrl}
       resolvedLabels={{

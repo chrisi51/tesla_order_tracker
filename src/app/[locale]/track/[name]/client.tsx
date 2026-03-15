@@ -33,7 +33,7 @@ interface TrackingPageClientProps {
   fasterPercent: number | null
   detailFields: { label: string; value: string | null }[]
   durationFields: { label: string; value: number | null }[]
-  colorInfo: { hex: string; border: boolean } | null
+  colorInfo: { hex: string; border: boolean; label: string } | null
   countryInfo: { label: string; flag: string } | null
   donationUrl?: string | null
   resolvedLabels: {
@@ -207,7 +207,7 @@ export function TrackingPageClient({
                           )}
                           style={{ backgroundColor: colorInfo.hex }}
                         />
-                        {order.color}
+                        {colorInfo?.label || order.color}
                       </Badge>
                     )}
                   </div>
