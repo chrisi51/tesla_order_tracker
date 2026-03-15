@@ -41,7 +41,7 @@ export function StatCard({ label, value, icon: Icon, description, hint, variant 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
-      className={`group relative overflow-hidden rounded-xl border bg-card p-4 sm:p-5 transition-all duration-200 hover:translate-y-[-2px] ${
+      className={`group relative overflow-hidden rounded-xl border bg-card p-3 sm:p-4 transition-all duration-200 hover:translate-y-[-1px] ${
         isHero
           ? 'border-primary/20 bg-gradient-to-br from-primary/8 via-primary/3 to-transparent shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-elevated)] ring-1 ring-primary/10'
           : 'shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]'
@@ -54,15 +54,15 @@ export function StatCard({ label, value, icon: Icon, description, hint, variant 
         }`} />
       )}
 
-      <div className="flex items-start justify-between gap-3 pl-2">
-        <div className="space-y-1 sm:space-y-1.5 min-w-0 flex-1">
+      <div className="flex items-start justify-between gap-2 pl-2">
+        <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
           <div className="flex items-center gap-1">
-            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 sm:truncate">{label}</p>
+            <p className="text-[11px] sm:text-xs text-muted-foreground line-clamp-1 sm:truncate">{label}</p>
             {hint && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="min-w-[28px] min-h-[28px] flex items-center justify-center">
+                    <span className="min-w-[20px] min-h-[20px] flex items-center justify-center">
                       <Info className="h-3 w-3 text-muted-foreground/60 cursor-help shrink-0" />
                     </span>
                   </TooltipTrigger>
@@ -74,14 +74,14 @@ export function StatCard({ label, value, icon: Icon, description, hint, variant 
             )}
           </div>
           <p className={`font-bold tracking-tight truncate tabular-nums ${
-            isHero ? 'text-xl sm:text-3xl' : 'text-lg sm:text-2xl'
+            isHero ? 'text-lg sm:text-2xl' : 'text-base sm:text-xl'
           } ${isZeroValue ? 'text-muted-foreground' : ''}`}>{displayValue}</p>
           {description && (
-            <p className="text-xs sm:text-sm text-muted-foreground/80 truncate">{description}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground/80 truncate">{description}</p>
           )}
         </div>
-        <div className={`rounded-xl ${colors.bg} p-2.5 sm:p-3 shrink-0 transition-colors ${colors.hoverBg}`}>
-          <Icon className={`${colors.text} ${isHero ? 'h-5 w-5 sm:h-6 sm:w-6' : 'h-5 w-5 sm:h-6 sm:w-6'}`} />
+        <div className={`rounded-lg ${colors.bg} p-1.5 sm:p-2 shrink-0 transition-colors ${colors.hoverBg}`}>
+          <Icon className={`${colors.text} ${isHero ? 'h-4 w-4 sm:h-5 sm:w-5' : 'h-3.5 w-3.5 sm:h-4 sm:w-4'}`} />
         </div>
       </div>
 
