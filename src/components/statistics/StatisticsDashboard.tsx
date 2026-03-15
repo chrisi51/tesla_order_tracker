@@ -386,6 +386,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               description={t('orders')}
               hint={t('hintTotal')}
               variant="hero"
+              semanticColor="data"
               delay={0}
               watermark
             />
@@ -396,6 +397,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               description={`${stats.totalOrders > 0 ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0}%`}
               hint={t('hintDelivered')}
               variant="hero"
+              semanticColor="success"
               delay={0.1}
               watermark
             />
@@ -405,6 +407,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               icon={Package}
               description={t('waitingForDelivery')}
               hint={t('hintPending')}
+              semanticColor="pending"
               delay={0.2}
             />
             <StatCard
@@ -412,6 +415,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               value={stats.avgOrderToDelivery !== null ? `${stats.avgOrderToDelivery} ${tc('days')}` : '-'}
               icon={Timer}
               hint={t('hintAvgDelivery')}
+              semanticColor="data"
               delay={0.3}
             />
           </div>
@@ -423,6 +427,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               value={stats.avgOrderToVin !== null ? `${stats.avgOrderToVin} ${tc('days')}` : '-'}
               icon={Clock}
               hint={t('hintAvgVin')}
+              semanticColor="data"
               delay={0.4}
             />
             <StatCard
@@ -432,6 +437,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               hint={stats.avgOrderToPapers === null
                 ? t('hintAvgPapersNull')
                 : t('hintAvgPapers')}
+              semanticColor="data"
               delay={0.5}
             />
             <StatCard
@@ -439,6 +445,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               value={stats.avgPapersToDelivery !== null ? `${stats.avgPapersToDelivery} ${tc('days')}` : '-'}
               icon={TrendingUp}
               hint={t('hintPapersToDelivery')}
+              semanticColor="data"
               delay={0.6}
             />
             <StatCard
@@ -447,6 +454,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               icon={CheckCircle2}
               description={t('ofTotal', { delivered: stats.deliveredOrders, total: stats.totalOrders })}
               hint={t('hintDeliveryRate')}
+              semanticColor="success"
               delay={0.7}
             />
           </div>
