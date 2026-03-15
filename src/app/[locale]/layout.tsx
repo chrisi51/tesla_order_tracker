@@ -4,22 +4,44 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_SC, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
 import "../globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CompositorCodesProvider } from "@/lib/CompositorCodesContext";
 import { routing } from '@/i18n/routing';
+import { OG_LOCALE_MAP, type Locale } from '@/i18n/locales';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin", "latin-ext"],
+});
+
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-noto-sc",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSansJP = Noto_Sans_JP({
+  variable: "--font-noto-jp",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSansKR = Noto_Sans_KR({
+  variable: "--font-noto-kr",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export function generateStaticParams() {
@@ -50,14 +72,13 @@ export async function generateMetadata({
       url: baseUrl,
       siteName: 'TFF Order Stats',
       type: 'website',
-      locale: locale === 'de' ? 'de_DE' : 'en_US',
+      locale: OG_LOCALE_MAP[locale as Locale] ?? 'de_DE',
     },
     alternates: {
-      canonical: `https://tff-order-stats.de${locale === 'de' ? '' : '/en'}`,
-      languages: {
-        'de': 'https://tff-order-stats.de',
-        'en': 'https://tff-order-stats.de/en',
-      },
+      canonical: `${baseUrl}${locale === 'de' ? '' : `/${locale}`}`,
+      languages: Object.fromEntries(
+        routing.locales.map(l => [l, `${baseUrl}${l === 'de' ? '' : `/${l}`}`])
+      ),
     },
     twitter: {
       card: 'summary',
@@ -113,7 +134,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSansSC.variable} ${notoSansJP.variable} ${notoSansKR.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

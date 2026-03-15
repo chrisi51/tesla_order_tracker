@@ -8,19 +8,42 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { LOCALE_CONFIG, REGION_LABELS, type Locale } from '@/i18n/locales'
 
-const LOCALES = [
-  { code: 'de' as const, flag: '🇩🇪', label: 'Deutsch' },
-  { code: 'en' as const, flag: '🇬🇧', label: 'English' },
-] as const
+const REGIONS = ['europe-west', 'nordic', 'europe-east', 'europe-other', 'asian'] as const
+
+function getLocalesByRegion() {
+  return REGIONS.map(region => ({
+    region,
+    label: REGION_LABELS[region],
+    locales: (Object.entries(LOCALE_CONFIG) as [Locale, typeof LOCALE_CONFIG[Locale]][])
+      .filter(([, config]) => config.region === region),
+  }))
+}
+
+function saveLocalePreference(locale: string) {
+  // Cookie for server-side middleware (next-intl reads NEXT_LOCALE)
+  document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=${365 * 24 * 60 * 60};SameSite=Lax`
+  // localStorage as backup
+  try { localStorage.setItem('preferred-locale', locale) } catch {}
+}
 
 export function LanguageSwitcher() {
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
-  const current = LOCALES.find(l => l.code === locale) || LOCALES[0]
+  const current = LOCALE_CONFIG[locale as Locale] ?? LOCALE_CONFIG.de
+
+  const groups = getLocalesByRegion()
+
+  const handleSwitch = (code: Locale) => {
+    saveLocalePreference(code)
+    router.replace(pathname, { locale: code })
+  }
 
   return (
     <DropdownMenu>
@@ -29,16 +52,22 @@ export function LanguageSwitcher() {
           <TwemojiEmoji emoji={current.flag} size={20} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {LOCALES.map(({ code, flag, label }) => (
-          <DropdownMenuItem
-            key={code}
-            onClick={() => router.replace(pathname, { locale: code })}
-            className={locale === code ? 'font-semibold' : ''}
-          >
-            <TwemojiEmoji emoji={flag} size={18} />
-            <span className="ml-2">{label}</span>
-          </DropdownMenuItem>
+      <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
+        {groups.map(({ region, label, locales }, gi) => (
+          <div key={region}>
+            {gi > 0 && <DropdownMenuSeparator />}
+            <DropdownMenuLabel className="text-xs text-muted-foreground">{label}</DropdownMenuLabel>
+            {locales.map(([code, config]) => (
+              <DropdownMenuItem
+                key={code}
+                onClick={() => handleSwitch(code)}
+                className={locale === code ? 'font-semibold' : ''}
+              >
+                <TwemojiEmoji emoji={config.flag} size={18} />
+                <span className="ml-2">{config.label}</span>
+              </DropdownMenuItem>
+            ))}
+          </div>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

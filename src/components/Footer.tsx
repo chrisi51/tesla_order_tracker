@@ -13,6 +13,7 @@ interface FooterProps {
 
 export function Footer({ settings, orderCount, deliveredCount }: FooterProps) {
   const t = useTranslations('footer')
+  const tn = useTranslations('nav')
 
   return (
     <footer className="border-t mt-12 bg-muted/20">
@@ -36,14 +37,14 @@ export function Footer({ settings, orderCount, deliveredCount }: FooterProps) {
               className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors hover:underline underline-offset-4"
             >
               <Code2 className="h-4 w-4" />
-              <span>API Docs</span>
+              <span>{tn('apiDocs')}</span>
             </Link>
             <span className="text-muted-foreground/40">·</span>
             <Link
               href="/impressum"
               className="hover:text-foreground transition-colors hover:underline underline-offset-4"
             >
-              Impressum
+              {tn('impressum')}
             </Link>
           </div>
 

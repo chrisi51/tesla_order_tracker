@@ -35,6 +35,7 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
   const t = useTranslations('home')
   const tc = useTranslations('common')
   const ts = useTranslations('search')
+  const tn = useTranslations('nav')
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -61,7 +62,7 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
             <Link href="/">
               <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
                 <LayoutDashboard className="h-4 w-4" />
-                Dashboard
+                {tn('dashboard')}
               </Button>
             </Link>
             <Link href="/new">
@@ -86,9 +87,9 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
               </a>
             )}
             <Link href="/docs">
-              <Button variant="ghost" size="icon" className="h-9 w-9" title="API Docs">
+              <Button variant="ghost" size="icon" className="h-9 w-9" title={tn('apiDocs')}>
                 <Code2 className="h-4 w-4" />
-                <span className="sr-only">API Docs</span>
+                <span className="sr-only">{tn('apiDocs')}</span>
               </Button>
             </Link>
             <a
@@ -210,13 +211,13 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
         <SheetContent side="right" className="w-72">
           <SheetHeader>
             <SheetTitle>TFF Order Stats</SheetTitle>
-            <SheetDescription className="sr-only">Navigation menu</SheetDescription>
+            <SheetDescription className="sr-only">{tn('navigationMenu')}</SheetDescription>
           </SheetHeader>
           <nav className="mt-6 flex flex-col gap-2">
             <Link href="/" onClick={() => setMobileOpen(false)}>
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <LayoutDashboard className="h-4 w-4" />
-                Dashboard
+                {tn('dashboard')}
               </Button>
             </Link>
             <Link href="/new" onClick={() => setMobileOpen(false)}>
@@ -231,7 +232,7 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
             <Link href="/docs" onClick={() => setMobileOpen(false)}>
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <Code2 className="h-4 w-4" />
-                API Docs
+                {tn('apiDocs')}
               </Button>
             </Link>
             <a
@@ -265,7 +266,7 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
               <Link href="/admin" onClick={() => setMobileOpen(false)}>
                 <Button variant="outline" className="w-full justify-start gap-2 border-primary/30 text-primary">
                   <LogIn className="h-4 w-4" />
-                  Admin Dashboard
+                  {tn('adminDashboard')}
                 </Button>
               </Link>
             ) : (

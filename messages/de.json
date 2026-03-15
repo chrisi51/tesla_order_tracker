@@ -682,6 +682,13 @@
     "communityMessage": "Diese Daten werden von der Community für die Community gepflegt. Wenn dir die Seite hilft, kannst du die Serverkosten unterstützen.",
     "supportButton": "Unterstützen"
   },
+  "nav": {
+    "dashboard": "Dashboard",
+    "apiDocs": "API-Dokumentation",
+    "adminDashboard": "Admin Dashboard",
+    "navigationMenu": "Navigationsmenü",
+    "impressum": "Impressum"
+  },
   "footer": {
     "operatedBy": "Betrieben von Sven",
     "supportDevelopment": "Hosting & Entwicklung unterstützen",
