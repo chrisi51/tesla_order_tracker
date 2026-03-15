@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Order, VehicleType, VEHICLE_TYPES, COLORS, DRIVES, MODEL_Y_TRIMS, MODEL_3_TRIMS } from '@/lib/types'
@@ -44,7 +44,9 @@ import {
   X,
   Zap,
   MapPin,
+  ChevronDown,
 } from 'lucide-react'
+import { FilterCollapse } from '@/components/FilterCollapse'
 
 interface StatisticsDashboardProps {
   orders: Order[]
@@ -139,7 +141,9 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
     return result
   }, [orders, filters])
 
+  const tabsRef = useRef<HTMLDivElement>(null)
   const hasActiveFilters = filters.model !== '' || filters.color !== '' || filters.drive !== ''
+  const activeFilterCount = [filters.model, filters.color, filters.drive].filter(v => v !== '').length
 
   // Build available filter options from actual order data
   const filterOptions = useMemo(() => {
@@ -248,80 +252,82 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
             </Select>
           </div>
 
-          {/* Model Filter */}
-          {filterOptions.modelOptions.length > 1 && (
-            <Select
-              value={filters.model || '_all'}
-              onValueChange={(v) => setFilters(f => ({ ...f, model: v === '_all' ? '' : v }))}
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder={t('modelDistribution')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">{t('modelDistribution')}: {tc('all')}</SelectItem>
-                {filterOptions.modelOptions.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+          <FilterCollapse activeCount={activeFilterCount}>
+            {/* Model Filter */}
+            {filterOptions.modelOptions.length > 1 && (
+              <Select
+                value={filters.model || '_all'}
+                onValueChange={(v) => setFilters(f => ({ ...f, model: v === '_all' ? '' : v }))}
+              >
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder={t('modelDistribution')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">{t('modelDistribution')}: {tc('all')}</SelectItem>
+                  {filterOptions.modelOptions.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
 
-          {/* Color Filter */}
-          {filterOptions.colorOptions.length > 1 && (
-            <Select
-              value={filters.color || '_all'}
-              onValueChange={(v) => setFilters(f => ({ ...f, color: v === '_all' ? '' : v }))}
-            >
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder={t('colorDistribution')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">{t('colorDistribution')}: {tc('all')}</SelectItem>
-                {filterOptions.colorOptions.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>
-                    <span className="flex items-center gap-2">
-                      {COLORS.find(c => c.value === o.value)?.hex && (
-                        <span
-                          className="w-3 h-3 rounded-full inline-block shrink-0 border border-border"
-                          style={{ backgroundColor: COLORS.find(c => c.value === o.value)?.hex }}
-                        />
-                      )}
-                      {o.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+            {/* Color Filter */}
+            {filterOptions.colorOptions.length > 1 && (
+              <Select
+                value={filters.color || '_all'}
+                onValueChange={(v) => setFilters(f => ({ ...f, color: v === '_all' ? '' : v }))}
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder={t('colorDistribution')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">{t('colorDistribution')}: {tc('all')}</SelectItem>
+                  {filterOptions.colorOptions.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>
+                      <span className="flex items-center gap-2">
+                        {COLORS.find(c => c.value === o.value)?.hex && (
+                          <span
+                            className="w-3 h-3 rounded-full inline-block shrink-0 border border-border"
+                            style={{ backgroundColor: COLORS.find(c => c.value === o.value)?.hex }}
+                          />
+                        )}
+                        {o.label}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
 
-          {/* Drive Filter */}
-          {filterOptions.driveOptions.length > 1 && (
-            <Select
-              value={filters.drive || '_all'}
-              onValueChange={(v) => setFilters(f => ({ ...f, drive: v === '_all' ? '' : v }))}
-            >
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder={t('driveDistribution')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="_all">{t('driveDistribution')}: {tc('all')}</SelectItem>
-                {filterOptions.driveOptions.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+            {/* Drive Filter */}
+            {filterOptions.driveOptions.length > 1 && (
+              <Select
+                value={filters.drive || '_all'}
+                onValueChange={(v) => setFilters(f => ({ ...f, drive: v === '_all' ? '' : v }))}
+              >
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder={t('driveDistribution')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="_all">{t('driveDistribution')}: {tc('all')}</SelectItem>
+                  {filterOptions.driveOptions.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
 
-          {/* Clear Filters */}
-          {hasActiveFilters && (
-            <button
-              onClick={() => setFilters(emptyFilters)}
-              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
-            >
-              <X className="h-3 w-3" />
-              {tc('reset')}
-            </button>
-          )}
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <button
+                onClick={() => setFilters(emptyFilters)}
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+              >
+                <X className="h-3 w-3" />
+                {tc('reset')}
+              </button>
+            )}
+          </FilterCollapse>
         </div>
 
           {/* Active filters indicator */}
@@ -342,8 +348,12 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
       </div>
 
       {/* Main Statistics Tabs */}
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="flex w-full overflow-x-auto flex-nowrap gap-1 sm:grid sm:grid-cols-6">
+      <Tabs defaultValue="overview" className="w-full" ref={tabsRef} onValueChange={() => {
+        setTimeout(() => {
+          tabsRef.current?.querySelector('[role="tabpanel"]')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }, 50)
+      }}>
+        <TabsList className="sticky-tabs flex w-full overflow-x-auto flex-nowrap gap-1 sm:grid sm:grid-cols-6">
           <TabsTrigger value="overview" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <BarChart3 className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('overviewShort')}</span>
@@ -378,7 +388,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
         {/* Tab 1: Overview */}
         <TabsContent value="overview" className="mt-6 space-y-5">
           {/* Stats Overview */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             <StatCard
               label={t('total')}
               value={stats.totalOrders}
@@ -421,7 +431,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
           </div>
 
           {/* Additional Time Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             <StatCard
               label={t('avgOrderToVin')}
               value={stats.avgOrderToVin !== null ? `${stats.avgOrderToVin} ${tc('days')}` : '-'}
@@ -497,7 +507,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <CountryDistributionChart data={stats.countryDistribution} />
               </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
             <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
               <CardHeader className="pb-3">
@@ -512,7 +522,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <CountryDistributionChart data={stats.deliveryLocationDistribution.slice(0, 10)} />
               </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
           </div>
 
@@ -551,7 +561,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
                   </TableBody>
                 </Table>
               </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
           )}
         </TabsContent>
@@ -576,7 +586,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <OrdersTimelineChart data={stats.ordersOverTime} />
               </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
 
             <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
@@ -592,7 +602,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
               <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
                 <DeliveryTimelineChart data={stats.deliveriesOverTime} />
               </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
             </Card>
           </div>
 
@@ -610,7 +620,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
             <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
               <VinWeekdayChart data={stats.vinWeekdayDistribution} />
             </CardContent>
-            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
           </Card>
 
           {/* VIN Activity */}
@@ -630,7 +640,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
             <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
               <WaitTimeDistributionChart data={stats.waitTimeDistribution} />
             </CardContent>
-            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
           </Card>
         </TabsContent>
 
@@ -648,7 +658,7 @@ export function StatisticsDashboard({ orders }: StatisticsDashboardProps) {
             <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
               <ConfigDeliveryInsights orders={filteredOrders} />
             </CardContent>
-            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
+            <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.20] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
           </Card>
         </TabsContent>
       </Tabs>
