@@ -194,6 +194,10 @@ export function calculateConfigInsights(
   const delivered = orders.filter(o => o.deliveryDate)
   const groups: Record<string, number[]> = {}
 
+  // Check if data contains multiple vehicle types (for model dimension disambiguation)
+  const vehicleTypes = new Set(delivered.map(o => o.vehicleType).filter(Boolean))
+  const hasMultipleVehicles = vehicleTypes.size > 1
+
   delivered.forEach(o => {
     const days = calculateDaysBetween(o.orderDate, o.deliveryDate)
     if (days === null) return
@@ -207,7 +211,12 @@ export function calculateConfigInsights(
     }
     if (!rawKey) return
 
-    const key = resolveLabel(rawKey, dimension)
+    let key = resolveLabel(rawKey, dimension)
+    // Prefix model names with vehicle type when both MY and M3 are present
+    if (dimension === 'model' && hasMultipleVehicles && o.vehicleType) {
+      const vt = o.vehicleType === 'Model Y' ? 'MY' : o.vehicleType === 'Model 3' ? 'M3' : o.vehicleType
+      key = `${vt} ${key}`
+    }
     if (!groups[key]) groups[key] = []
     groups[key].push(days)
   })
