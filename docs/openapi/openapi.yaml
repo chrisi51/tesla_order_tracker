@@ -1229,13 +1229,7 @@ components:
           type: string
         vinReceivedDate:
           type: string
-        papersReceivedDate:
-          type: string
         productionDate:
-          type: string
-        typeApproval:
-          type: string
-        typeVariant:
           type: string
         deliveryDate:
           type: string
@@ -1245,6 +1239,9 @@ components:
 
     TostUpdateOrderRequest:
       type: object
+      description: |
+        Note: `papersReceivedDate`, `typeApproval`, and `typeVariant` are NOT accepted
+        by this endpoint — TOST cannot provide these fields. Users edit them via the webapp.
       properties:
         name:
           type: string
@@ -1281,13 +1278,7 @@ components:
           type: string
         vinReceivedDate:
           type: string
-        papersReceivedDate:
-          type: string
         productionDate:
-          type: string
-        typeApproval:
-          type: string
-        typeVariant:
           type: string
         deliveryDate:
           type: string
