@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ArrowLeft, Share2, Check, Calendar, MapPin, TrendingUp, Clock } from 'lucide-react'
+import { TwemojiEmoji } from '@/components/TwemojiText'
 import { motion } from 'framer-motion'
 
 interface TrackingPageClientProps {
@@ -56,6 +57,7 @@ export function TrackingPageClient({
   resolvedLabels,
 }: TrackingPageClientProps) {
   const t = useTranslations('tracking')
+  const tc = useTranslations('common')
   const [copied, setCopied] = useState(false)
 
   // Confetti for delivered orders
@@ -160,7 +162,10 @@ export function TrackingPageClient({
                         </span>
                       )}
                       {countryInfo && (
-                        <span>{countryInfo.flag} {countryInfo.label}</span>
+                        <span className="flex items-center gap-1">
+                          <TwemojiEmoji emoji={countryInfo.flag} size={14} />
+                          {countryInfo.label}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -269,7 +274,7 @@ export function TrackingPageClient({
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className={confidenceColor}>
-                    {t('predictionConfidence', { level: prediction.confidence })}
+                    {t('predictionConfidence', { level: t(`confidence_${prediction.confidence}`) })}
                   </span>
                   <span>{t('predictionSample', { count: prediction.sampleSize })}</span>
                 </div>
@@ -292,7 +297,7 @@ export function TrackingPageClient({
                     <div key={field.label} className="text-center">
                       <p className="text-xs text-muted-foreground mb-1">{field.label}</p>
                       <p className="text-2xl font-bold font-mono">{field.value}</p>
-                      <p className="text-xs text-muted-foreground">Tage</p>
+                      <p className="text-xs text-muted-foreground">{tc('days')}</p>
                     </div>
                   ))}
                 </div>
