@@ -37,8 +37,10 @@ function buildOrderData(body: Record<string, unknown>) {
 
 // POST /api/v1/tost/orders - Create a new TOST-managed order
 export const POST = withTostAuth(async (request: NextRequest) => {
+  let bodyName: string | undefined
   try {
     const body = await request.json()
+    bodyName = body?.name as string | undefined
 
     if (!body.name?.trim()) {
       return ApiErrors.validationError('Validation failed', {
@@ -68,7 +70,20 @@ export const POST = withTostAuth(async (request: NextRequest) => {
     console.error('TOST orders POST error:', error)
     const errorMsg = error instanceof Error ? error.message : 'Unknown error'
     if (errorMsg.includes('Unique constraint')) {
-      return ApiErrors.conflict('An order with this ID already exists')
+      // Check if there's an existing order with the same name that could be claimed
+      let existingOrderId: string | null = null
+      if (bodyName) {
+        const existing = await prisma.order.findFirst({
+          where: { name: bodyName.trim(), source: { not: 'tost' } },
+          select: { id: true },
+        })
+        existingOrderId = existing?.id ?? null
+      }
+      return ApiErrors.conflict(
+        existingOrderId
+          ? `An order with this ID already exists. Found unclaimed order "${bodyName}" with ID ${existingOrderId}. Use POST /api/v1/tost/claim/${existingOrderId} to claim it.`
+          : 'An order with this ID already exists.'
+      )
     }
     return ApiErrors.serverError('Failed to create order')
   }
