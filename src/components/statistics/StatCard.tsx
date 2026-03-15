@@ -33,6 +33,8 @@ const colorMap = {
 export function StatCard({ label, value, icon: Icon, description, hint, variant = 'default', semanticColor = 'brand', minimal = false, delay = 0, watermark = false }: StatCardProps) {
   const isHero = variant === 'hero'
   const colors = colorMap[semanticColor]
+  const displayValue = (value === 0 || value === '0') ? '\u2014' : value
+  const isZeroValue = value === 0 || value === '0'
 
   return (
     <motion.div
@@ -73,7 +75,7 @@ export function StatCard({ label, value, icon: Icon, description, hint, variant 
           </div>
           <p className={`font-bold tracking-tight truncate tabular-nums ${
             isHero ? 'text-xl sm:text-3xl' : 'text-lg sm:text-2xl'
-          }`}>{value}</p>
+          } ${isZeroValue ? 'text-muted-foreground' : ''}`}>{displayValue}</p>
           {description && (
             <p className="text-xs sm:text-sm text-muted-foreground/80 truncate">{description}</p>
           )}

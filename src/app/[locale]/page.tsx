@@ -287,9 +287,9 @@ export default function Home() {
           <CardContent>
             {loading ? (
               <div className="space-y-4">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full animate-shimmer" />
+                <Skeleton className="h-16 w-full animate-shimmer" />
+                <Skeleton className="h-16 w-full animate-shimmer" />
               </div>
             ) : (
               <CollapsibleOrderSection
