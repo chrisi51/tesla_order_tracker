@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Gyártás",
     "timelinePapers": "Dokumentumok",
-    "timelineDelivery": "Kiszállítás"
+    "timelineDelivery": "Kiszállítás",
+    "totalWaitTime": "Teljes várakozási idő"
   },
   "admin": {
     "dashboard": "Rendszergazdai kezelőpanel",

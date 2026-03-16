@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Proizvodnja",
     "timelinePapers": "Dokumenti",
-    "timelineDelivery": "Isporuka"
+    "timelineDelivery": "Isporuka",
+    "totalWaitTime": "Ukupno vrijeme čekanja"
   },
   "admin": {
     "dashboard": "Administratorska ploča",

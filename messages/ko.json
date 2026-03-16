@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "생산",
     "timelinePapers": "서류",
-    "timelineDelivery": "배송"
+    "timelineDelivery": "배송",
+    "totalWaitTime": "총 대기 시간"
   },
   "admin": {
     "dashboard": "관리자 대시보드",

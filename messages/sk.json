@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Výroba",
     "timelinePapers": "Dokumenty",
-    "timelineDelivery": "Dodanie"
+    "timelineDelivery": "Dodanie",
+    "totalWaitTime": "Celková čakacia doba"
   },
   "admin": {
     "dashboard": "Administrátorský panel",

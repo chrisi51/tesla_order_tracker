@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Tuotanto",
     "timelinePapers": "Asiakirjat",
-    "timelineDelivery": "Toimitus"
+    "timelineDelivery": "Toimitus",
+    "totalWaitTime": "Kokonaisodotusaika"
   },
   "admin": {
     "dashboard": "Ylläpidon hallintapaneeli",

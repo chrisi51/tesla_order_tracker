@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Produksjon",
     "timelinePapers": "Papirer",
-    "timelineDelivery": "Levering"
+    "timelineDelivery": "Levering",
+    "totalWaitTime": "Total ventetid"
   },
   "admin": {
     "dashboard": "Administrasjonspanel",

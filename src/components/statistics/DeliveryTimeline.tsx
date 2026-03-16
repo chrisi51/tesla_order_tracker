@@ -77,6 +77,14 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
           </div>
         ))}
       </div>
+
+      {/* Total waiting time */}
+      {stats.avgOrderToDelivery !== null && (
+        <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
+          <span className="text-sm font-medium text-muted-foreground">{t('totalWaitTime')}</span>
+          <span className="text-sm font-bold tabular-nums">{formatDays(stats.avgOrderToDelivery)}</span>
+        </div>
+      )}
     </div>
   )
 }

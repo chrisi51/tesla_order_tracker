@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Производство",
     "timelinePapers": "Документи",
-    "timelineDelivery": "Доставка"
+    "timelineDelivery": "Доставка",
+    "totalWaitTime": "Общо време на чакане"
   },
   "admin": {
     "dashboard": "Административен панел",

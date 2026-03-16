@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Παραγωγή",
     "timelinePapers": "Έγγραφα",
-    "timelineDelivery": "Παράδοση"
+    "timelineDelivery": "Παράδοση",
+    "totalWaitTime": "Συνολικός χρόνος αναμονής"
   },
   "admin": {
     "dashboard": "Πίνακας Ελέγχου Διαχειριστή",

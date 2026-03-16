@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "製造",
     "timelinePapers": "書類",
-    "timelineDelivery": "納車"
+    "timelineDelivery": "納車",
+    "totalWaitTime": "合計待ち時間"
   },
   "admin": {
     "dashboard": "管理者ダッシュボード",

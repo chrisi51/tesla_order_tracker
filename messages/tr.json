@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Üretim",
     "timelinePapers": "Belgeler",
-    "timelineDelivery": "Teslimat"
+    "timelineDelivery": "Teslimat",
+    "totalWaitTime": "Toplam bekleme süresi"
   },
   "admin": {
     "dashboard": "Yönetici Paneli",

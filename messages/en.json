@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Production",
     "timelinePapers": "Papers",
-    "timelineDelivery": "Delivery"
+    "timelineDelivery": "Delivery",
+    "totalWaitTime": "Total Wait Time"
   },
   "admin": {
     "dashboard": "Admin Dashboard",

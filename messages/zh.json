@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "生产",
     "timelinePapers": "文件",
-    "timelineDelivery": "交付"
+    "timelineDelivery": "交付",
+    "totalWaitTime": "总等待时间"
   },
   "admin": {
     "dashboard": "管理员仪表板",

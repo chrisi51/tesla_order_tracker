@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Production",
     "timelinePapers": "Documents",
-    "timelineDelivery": "Livraison"
+    "timelineDelivery": "Livraison",
+    "totalWaitTime": "Temps d'attente total"
   },
   "admin": {
     "dashboard": "Tableau de bord administrateur",

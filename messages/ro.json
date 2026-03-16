@@ -341,7 +341,8 @@
     "timelineVin": "VIN",
     "timelineProduction": "Producție",
     "timelinePapers": "Documente",
-    "timelineDelivery": "Livrare"
+    "timelineDelivery": "Livrare",
+    "totalWaitTime": "Timp total de așteptare"
   },
   "admin": {
     "dashboard": "Panou de administrare",
