@@ -3,14 +3,6 @@ import { NextResponse } from 'next/server'
 import { Order } from '@/lib/types'
 import { parseGermanDate } from '@/lib/statistics'
 
-function getISOWeekNumber(date: Date): { year: number; week: number } {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7))
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
-  const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7)
-  return { year: d.getUTCFullYear(), week: weekNo }
-}
-
 export async function GET() {
   try {
     const orders = await prisma.order.findMany({
@@ -30,14 +22,17 @@ export async function GET() {
       ? Math.round(deliveryDays.reduce((s, d) => s + d, 0) / deliveryDays.length)
       : null
 
-    // VINs this week
+    // VINs this week — use local time to match parseGermanDate
     const now = new Date()
-    const currentWeek = getISOWeekNumber(now)
+    const localDay = now.getDay() || 7
+    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - localDay + 1)
+    weekStart.setHours(0, 0, 0, 0)
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekEnd.getDate() + 7)
     const vinsThisWeek = orders.filter(o => {
       const d = parseGermanDate(o.vinReceivedDate)
       if (!d) return false
-      const w = getISOWeekNumber(d)
-      return w.year === currentWeek.year && w.week === currentWeek.week
+      return d >= weekStart && d < weekEnd
     }).length
 
     const response = NextResponse.json({

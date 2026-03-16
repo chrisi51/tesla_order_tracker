@@ -586,11 +586,13 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
   const tostOrders = filteredOrders.filter(o => o.source === 'tost').length
   const manualOrders = totalOrders - tostOrders
 
-  // VINs this week (ISO week)
+  // VINs this week (ISO week) — use local time to match parseGermanDate
   const now = new Date()
-  const isoDay = now.getUTCDay() || 7 // Mon=1 … Sun=7
-  const weekStart = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate() - isoDay + 1))
-  const weekEnd = new Date(weekStart.getTime() + 7 * 86400000)
+  const localDay = now.getDay() || 7 // Mon=1 … Sun=7
+  const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - localDay + 1)
+  weekStart.setHours(0, 0, 0, 0)
+  const weekEnd = new Date(weekStart)
+  weekEnd.setDate(weekEnd.getDate() + 7)
   const vinsThisWeek = filteredOrders.filter(o => {
     const d = parseGermanDate(o.vinReceivedDate)
     if (!d) return false
