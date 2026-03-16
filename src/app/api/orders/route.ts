@@ -334,11 +334,11 @@ export async function PUT(request: NextRequest) {
     // TOST-managed orders: only papersReceivedDate, typeApproval, typeVariant can be edited via webapp
     const tostCheck = await prisma.order.findUnique({ where: { id }, select: { source: true } })
     if (tostCheck?.source === 'tost') {
-      const tostUserEditableFields = ['papersReceivedDate', 'typeApproval', 'typeVariant']
+      const tostUserEditableFields = ['orderDate', 'papersReceivedDate', 'typeApproval', 'typeVariant']
       const attemptedFields = Object.keys(rawData).filter(k => k !== 'id')
       const disallowedFields = attemptedFields.filter(f => !tostUserEditableFields.includes(f))
       if (disallowedFields.length > 0) {
-        return NextResponse.json({ error: 'This order is managed by TOST. Only papers received date, type approval, and type variant can be edited.' }, { status: 403 })
+        return NextResponse.json({ error: 'This order is managed by TOST. Only order date, papers received date, type approval, and type variant can be edited.' }, { status: 403 })
       }
       // Allow the edit — update only the allowed fields directly
       const updateData: Record<string, unknown> = {}
@@ -348,18 +348,37 @@ export async function PUT(request: NextRequest) {
         }
       }
       if (Object.keys(updateData).length > 0) {
+        // Fetch existing dates for recalculation
+        const existingOrder = await prisma.order.findUnique({
+          where: { id },
+          select: { orderDate: true, deliveryDate: true, vinReceivedDate: true, productionDate: true, papersReceivedDate: true },
+        })
+
         // Recalculate papersToDelivery if papersReceivedDate changed
         if (updateData.papersReceivedDate) {
-          const fullOrder = await prisma.order.findUnique({ where: { id }, select: { deliveryDate: true } })
-          if (fullOrder?.deliveryDate) {
-            const papersToDelivery = calculateDaysBetween(updateData.papersReceivedDate as string, fullOrder.deliveryDate)
+          if (existingOrder?.deliveryDate) {
+            const papersToDelivery = calculateDaysBetween(updateData.papersReceivedDate as string, existingOrder.deliveryDate)
             if (papersToDelivery !== null) updateData.papersToDelivery = papersToDelivery
           }
-          // Also recalculate orderToPapers
-          const orderData = await prisma.order.findUnique({ where: { id }, select: { orderDate: true } })
-          if (orderData?.orderDate) {
-            const orderToPapers = calculateDaysBetween(orderData.orderDate, updateData.papersReceivedDate as string)
+          const effectiveOrderDate = (updateData.orderDate as string) ?? existingOrder?.orderDate
+          if (effectiveOrderDate) {
+            const orderToPapers = calculateDaysBetween(effectiveOrderDate, updateData.papersReceivedDate as string)
             if (orderToPapers !== null) updateData.orderToPapers = orderToPapers
+          }
+        }
+
+        // Recalculate all order-based time periods if orderDate changed
+        if (updateData.orderDate && existingOrder) {
+          const od = updateData.orderDate as string
+          const timePeriods = calculateTimePeriods({
+            orderDate: od,
+            productionDate: existingOrder.productionDate,
+            vinReceivedDate: existingOrder.vinReceivedDate,
+            deliveryDate: existingOrder.deliveryDate,
+            papersReceivedDate: (updateData.papersReceivedDate as string) ?? existingOrder.papersReceivedDate,
+          })
+          for (const [key, value] of Object.entries(timePeriods)) {
+            if (value !== null) updateData[key] = value
           }
         }
         const updated = await prisma.order.update({ where: { id }, data: updateData })

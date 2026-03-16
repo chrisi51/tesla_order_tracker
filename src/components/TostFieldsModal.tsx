@@ -11,13 +11,14 @@ import { Label } from '@/components/ui/label'
 interface TostFieldsModalProps {
   order: Order | null
   onClose: () => void
-  onSave: (orderId: string, data: { papersReceivedDate?: string; typeApproval?: string; typeVariant?: string }) => Promise<void>
+  onSave: (orderId: string, data: { orderDate?: string; papersReceivedDate?: string; typeApproval?: string; typeVariant?: string }) => Promise<void>
 }
 
 export function TostFieldsModal({ order, onClose, onSave }: TostFieldsModalProps) {
   const t = useTranslations('table')
   const tc = useTranslations('common')
 
+  const [orderDate, setOrderDate] = useState(order?.orderDate || '')
   const [papersReceivedDate, setPapersReceivedDate] = useState(order?.papersReceivedDate || '')
   const [typeApproval, setTypeApproval] = useState(order?.typeApproval || '')
   const [typeVariant, setTypeVariant] = useState(order?.typeVariant || '')
@@ -31,6 +32,7 @@ export function TostFieldsModal({ order, onClose, onSave }: TostFieldsModalProps
     setError(null)
     try {
       const data: Record<string, string> = {}
+      if (orderDate !== (order.orderDate || '')) data.orderDate = orderDate
       if (papersReceivedDate !== (order.papersReceivedDate || '')) data.papersReceivedDate = papersReceivedDate
       if (typeApproval !== (order.typeApproval || '')) data.typeApproval = typeApproval
       if (typeVariant !== (order.typeVariant || '')) data.typeVariant = typeVariant
@@ -58,6 +60,16 @@ export function TostFieldsModal({ order, onClose, onSave }: TostFieldsModalProps
         </DialogDescription>
 
         <div className="space-y-4 mt-2">
+          <div>
+            <Label htmlFor="orderDate">{t('orderDate')}</Label>
+            <Input
+              id="orderDate"
+              placeholder="TT.MM.JJJJ"
+              value={orderDate}
+              onChange={(e) => setOrderDate(e.target.value)}
+            />
+          </div>
+
           <div>
             <Label htmlFor="papersReceivedDate">{t('papersReceivedDate')}</Label>
             <Input
