@@ -15,7 +15,6 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import {
-  Plus,
   LogIn,
   Coffee,
   Github,
@@ -55,15 +54,6 @@ export function Header({ isAdmin, settings }: HeaderProps) {
 
           {/* Desktop nav (>=1024px) */}
           <nav className="hidden lg:flex items-center gap-1">
-            <Link href="/new">
-              <Button size="sm" className="gap-2 shadow-sm">
-                <Plus className="h-4 w-4" />
-                {t('newOrder')}
-              </Button>
-            </Link>
-
-            <div className="w-px h-5 bg-border mx-2" />
-
             {settings?.showDonation && settings?.donationUrl && (
               <a
                 href={settings.donationUrl}
@@ -117,14 +107,6 @@ export function Header({ isAdmin, settings }: HeaderProps) {
 
           {/* Tablet nav (640-1024px): icon-only */}
           <nav className="hidden sm:flex lg:hidden items-center gap-1">
-            <Link href="/new">
-              <Button size="icon" className="h-9 w-9 shadow-sm" title={t('newOrder')}>
-                <Plus className="h-4 w-4" />
-              </Button>
-            </Link>
-
-            <div className="w-px h-5 bg-border mx-1" />
-
             <LanguageSwitcher />
             <ThemeToggle />
 
@@ -168,15 +150,6 @@ export function Header({ isAdmin, settings }: HeaderProps) {
             <SheetDescription className="sr-only">{tn('navigationMenu')}</SheetDescription>
           </SheetHeader>
           <nav className="mt-6 flex flex-col gap-2">
-            <Link href="/new" onClick={() => setMobileOpen(false)}>
-              <Button className="w-full justify-start gap-2">
-                <Plus className="h-4 w-4" />
-                {t('newOrder')}
-              </Button>
-            </Link>
-
-            <div className="h-px bg-border my-2" />
-
             <Link href="/docs" onClick={() => setMobileOpen(false)}>
               <Button variant="ghost" className="w-full justify-start gap-2">
                 <Code2 className="h-4 w-4" />
