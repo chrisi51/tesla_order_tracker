@@ -38,7 +38,9 @@
     "actions": "Actions",
     "new": "New",
     "projectSupport": "Support this project",
-    "reset": "Reset"
+    "reset": "Reset",
+    "ordersRefreshed": "{count} orders refreshed",
+    "refreshError": "Failed to refresh orders"
   },
   "home": {
     "title": "Tesla Orders and Statistics",
@@ -594,7 +596,8 @@
       "low": "Low confidence"
     },
     "basedOn": "Based on {count} orders",
-    "notEnoughData": "Not enough data for prediction. Select a vehicle type."
+    "notEnoughData": "Not enough data for prediction. Select a vehicle type.",
+    "lowDataHint": "Few data points — the prediction may be inaccurate. More orders will improve accuracy."
   },
   "trend": {
     "title": "Delivery Trend",

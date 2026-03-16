@@ -38,7 +38,9 @@
     "actions": "Akcie",
     "new": "Nové",
     "projectSupport": "Podporte tento projekt",
-    "reset": "Obnoviť"
+    "reset": "Obnoviť",
+    "ordersRefreshed": "{count} objednávok aktualizovaných",
+    "refreshError": "Chyba pri aktualizácii"
   },
   "home": {
     "title": "Objednávky a štatistiky Tesla",
@@ -594,7 +596,8 @@
       "low": "Nízka spoľahlivosť"
     },
     "basedOn": "Na základe {count} objednávok",
-    "notEnoughData": "Nedostatok údajov na predikciu. Vyberte typ vozidla."
+    "notEnoughData": "Nedostatok údajov na predikciu. Vyberte typ vozidla.",
+    "lowDataHint": "Málo údajov — predpoveď môže byť nepresná. Viac objednávok zlepší presnosť."
   },
   "trend": {
     "title": "Trend dodaní",

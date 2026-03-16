@@ -38,7 +38,9 @@
     "actions": "Acțiuni",
     "new": "Nou",
     "projectSupport": "Sprijiniți acest proiect",
-    "reset": "Resetează"
+    "reset": "Resetează",
+    "ordersRefreshed": "{count} comenzi actualizate",
+    "refreshError": "Eroare la actualizare"
   },
   "home": {
     "title": "Comenzi și statistici Tesla",
@@ -594,7 +596,8 @@
       "low": "Încredere scăzută"
     },
     "basedOn": "Pe baza a {count} comenzi",
-    "notEnoughData": "Date insuficiente pentru predicție. Selectați un tip de vehicul."
+    "notEnoughData": "Date insuficiente pentru predicție. Selectați un tip de vehicul.",
+    "lowDataHint": "Puține date — prognoza poate fi inexactă. Mai multe comenzi vor îmbunătăți precizia."
   },
   "trend": {
     "title": "Tendința livrărilor",

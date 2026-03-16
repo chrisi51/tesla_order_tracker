@@ -38,7 +38,9 @@
     "actions": "Aktionen",
     "new": "Neu",
     "projectSupport": "Projekt unterstützen",
-    "reset": "Zurücksetzen"
+    "reset": "Zurücksetzen",
+    "ordersRefreshed": "{count} Bestellungen aktualisiert",
+    "refreshError": "Fehler beim Aktualisieren"
   },
   "home": {
     "title": "Tesla Bestellungen und Statistiken",
@@ -594,7 +596,8 @@
       "low": "Niedrige Konfidenz"
     },
     "basedOn": "Basierend auf {count} Bestellungen",
-    "notEnoughData": "Nicht genügend Daten für eine Prognose. Wähle ein Fahrzeug aus."
+    "notEnoughData": "Nicht genügend Daten für eine Prognose. Wähle ein Fahrzeug aus.",
+    "lowDataHint": "Wenige Datenpunkte — die Prognose kann ungenau sein. Mehr Bestellungen verbessern die Genauigkeit."
   },
   "trend": {
     "title": "Lieferzeit-Trend",

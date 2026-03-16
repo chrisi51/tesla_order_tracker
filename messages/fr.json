@@ -38,7 +38,9 @@
     "actions": "Actions",
     "new": "Nouveau",
     "projectSupport": "Soutenir ce projet",
-    "reset": "Réinitialiser"
+    "reset": "Réinitialiser",
+    "ordersRefreshed": "{count} commandes actualisées",
+    "refreshError": "Erreur lors de l'actualisation"
   },
   "home": {
     "title": "Commandes et statistiques Tesla",
@@ -594,7 +596,8 @@
       "low": "Confiance faible"
     },
     "basedOn": "Basé sur {count} commandes",
-    "notEnoughData": "Données insuffisantes pour la prévision. Sélectionnez un type de véhicule."
+    "notEnoughData": "Données insuffisantes pour la prévision. Sélectionnez un type de véhicule.",
+    "lowDataHint": "Peu de données — la prédiction peut être imprécise. Plus de commandes amélioreront la précision."
   },
   "trend": {
     "title": "Tendance de livraison",

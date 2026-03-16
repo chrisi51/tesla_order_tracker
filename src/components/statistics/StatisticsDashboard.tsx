@@ -31,7 +31,6 @@ import {
   Settings2,
   Hourglass,
   Package,
-  Zap,
   MapPin,
   Users,
 } from 'lucide-react'
@@ -121,36 +120,10 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
               />
             ) : (
               <div className="space-y-5">
-                {/* Hero row: Total + Delivered */}
-                <div className="grid grid-cols-2 gap-4">
-                  <StatCard
-                    label={t('total')}
-                    value={stats.totalOrders}
-                    icon={Car}
-                    description={t('orders')}
-                    hint={t('hintTotal')}
-                    variant="hero"
-                    semanticColor="data"
-                    delay={0}
-                    watermark
-                  />
-                  <StatCard
-                    label={t('delivered')}
-                    value={stats.deliveredOrders}
-                    icon={CheckCircle2}
-                    description={`${stats.totalOrders > 0 ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0}%`}
-                    hint={t('hintDelivered')}
-                    variant="hero"
-                    semanticColor="success"
-                    delay={0.1}
-                    watermark
-                  />
-                </div>
-
                 {/* Delivery pipeline timeline */}
                 <DeliveryTimeline stats={stats} />
 
-                {/* Secondary row */}
+                {/* Stats row */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   <StatCard
                     label={t('pending')}
@@ -208,15 +181,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                       </>
                     )}
                   </motion.div>
-                  <StatCard
-                    label={t('vinsThisWeek')}
-                    value={stats.vinsThisWeek}
-                    icon={Zap}
-                    semanticColor="pending"
-                    minimal
-                    delay={1.0}
-                    allowZero
-                  />
                 </div>
               </div>
             )}

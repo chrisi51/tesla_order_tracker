@@ -38,7 +38,9 @@
     "actions": "Åtgärder",
     "new": "Ny",
     "projectSupport": "Stöd detta projekt",
-    "reset": "Återställ"
+    "reset": "Återställ",
+    "ordersRefreshed": "{count} beställningar uppdaterade",
+    "refreshError": "Fel vid uppdatering"
   },
   "home": {
     "title": "Tesla-beställningar och statistik",
@@ -594,7 +596,8 @@
       "low": "Låg tillförlitlighet"
     },
     "basedOn": "Baserad på {count} beställningar",
-    "notEnoughData": "Inte tillräckligt med data för prognos. Välj en fordonstyp."
+    "notEnoughData": "Inte tillräckligt med data för prognos. Välj en fordonstyp.",
+    "lowDataHint": "Få datapunkter — prognosen kan vara felaktig. Fler beställningar förbättrar noggrannheten."
   },
   "trend": {
     "title": "Leveranstrend",

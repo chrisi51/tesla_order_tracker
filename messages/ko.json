@@ -38,7 +38,9 @@
     "actions": "작업",
     "new": "신규",
     "projectSupport": "이 프로젝트를 지원해 주세요",
-    "reset": "초기화"
+    "reset": "초기화",
+    "ordersRefreshed": "{count}개 주문 새로고침 완료",
+    "refreshError": "새로고침 실패"
   },
   "home": {
     "title": "Tesla 주문 및 통계",
@@ -594,7 +596,8 @@
       "low": "낮은 신뢰도"
     },
     "basedOn": "{count}건의 주문 기준",
-    "notEnoughData": "예측에 충분한 데이터가 없습니다. 차량 유형을 선택하세요."
+    "notEnoughData": "예측에 충분한 데이터가 없습니다. 차량 유형을 선택하세요.",
+    "lowDataHint": "데이터가 적어 예측이 부정확할 수 있습니다. 더 많은 주문이 정확도를 높입니다."
   },
   "trend": {
     "title": "인도 추세",

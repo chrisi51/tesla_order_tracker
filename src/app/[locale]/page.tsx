@@ -39,6 +39,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Plus, RefreshCw, Car, BarChart3, Copy, Check, KeyRound, ChevronUp, Calculator } from 'lucide-react'
+import { toast } from 'sonner'
 import { Link } from '@/i18n/navigation'
 
 export default function Home() {
@@ -140,15 +141,22 @@ export default function Home() {
   const orderGroups = useMemo(() => groupOrdersByQuarter(filteredOrders), [filteredOrders])
   const hasActiveGlobalFilters = globalFilters.vehicle !== 'all' || globalFilters.period.type !== 'all' || globalFilters.model !== '' || globalFilters.color !== '' || globalFilters.drive !== '' || globalFilters.country !== ''
 
-  const fetchOrders = useCallback(async () => {
+  const [refreshing, setRefreshing] = useState(false)
+
+  const fetchOrders = useCallback(async (showToast = false) => {
+    if (showToast) setRefreshing(true)
     try {
       const res = await fetch('/api/orders')
       const data = await res.json()
       setOrders(data)
+      if (showToast) toast.success(tc('ordersRefreshed', { count: data.length }))
     } catch (error) {
       console.error('Failed to fetch orders:', error)
+      if (showToast) toast.error(tc('refreshError'))
+    } finally {
+      if (showToast) setRefreshing(false)
     }
-  }, [])
+  }, [tc])
 
   const fetchSettings = useCallback(async () => {
     try {
@@ -359,8 +367,8 @@ export default function Home() {
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={fetchOrders} className="text-muted-foreground">
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                <Button variant="ghost" size="sm" onClick={() => fetchOrders(true)} disabled={refreshing} className="text-muted-foreground">
+                  <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
                   <span className="hidden sm:inline">{tc('refresh')}</span>
                 </Button>
                 <Button size="sm" onClick={() => setShowAddForm(true)} className="shadow-sm">
@@ -403,7 +411,7 @@ export default function Home() {
 
       {/* Delivery Prediction Dialog */}
       <Dialog open={showPrediction} onOpenChange={setShowPrediction}>
-        <DialogContent className="sm:max-w-2xl">
+        <DialogContent className="sm:max-w-2xl lg:max-w-4xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Calculator className="h-5 w-5 text-primary" />

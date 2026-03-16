@@ -38,7 +38,9 @@
     "actions": "Ações",
     "new": "Novo",
     "projectSupport": "Apoiar este projeto",
-    "reset": "Repor"
+    "reset": "Repor",
+    "ordersRefreshed": "{count} encomendas atualizadas",
+    "refreshError": "Erro ao atualizar"
   },
   "home": {
     "title": "Encomendas e estatísticas Tesla",
@@ -594,7 +596,8 @@
       "low": "Confiança baixa"
     },
     "basedOn": "Com base em {count} encomendas",
-    "notEnoughData": "Dados insuficientes para previsão. Selecione um tipo de veículo."
+    "notEnoughData": "Dados insuficientes para previsão. Selecione um tipo de veículo.",
+    "lowDataHint": "Poucos dados — a previsão pode ser imprecisa. Mais encomendas melhorarão a precisão."
   },
   "trend": {
     "title": "Tendência de entrega",

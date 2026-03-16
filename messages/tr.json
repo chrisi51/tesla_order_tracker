@@ -38,7 +38,9 @@
     "actions": "İşlemler",
     "new": "Yeni",
     "projectSupport": "Bu projeyi destekleyin",
-    "reset": "Sıfırla"
+    "reset": "Sıfırla",
+    "ordersRefreshed": "{count} sipariş yenilendi",
+    "refreshError": "Yenileme sırasında hata"
   },
   "home": {
     "title": "Tesla Siparişleri ve İstatistikleri",
@@ -594,7 +596,8 @@
       "low": "Düşük güven"
     },
     "basedOn": "{count} siparişe dayalı",
-    "notEnoughData": "Tahmin için yeterli veri yok. Bir araç tipi seçin."
+    "notEnoughData": "Tahmin için yeterli veri yok. Bir araç tipi seçin.",
+    "lowDataHint": "Az veri — tahmin yanlış olabilir. Daha fazla sipariş doğruluğu artıracaktır."
   },
   "trend": {
     "title": "Teslimat Trendi",

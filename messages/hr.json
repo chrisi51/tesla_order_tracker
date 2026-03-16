@@ -38,7 +38,9 @@
     "actions": "Radnje",
     "new": "Novo",
     "projectSupport": "Podržite ovaj projekt",
-    "reset": "Poništi"
+    "reset": "Poništi",
+    "ordersRefreshed": "{count} narudžbi osvježeno",
+    "refreshError": "Greška pri osvježavanju"
   },
   "home": {
     "title": "Tesla narudžbe i statistike",
@@ -594,7 +596,8 @@
       "low": "Niska pouzdanost"
     },
     "basedOn": "Na temelju {count} narudžbi",
-    "notEnoughData": "Nedovoljno podataka za prognozu. Odaberite tip vozila."
+    "notEnoughData": "Nedovoljno podataka za prognozu. Odaberite tip vozila.",
+    "lowDataHint": "Malo podataka — prognoza može biti netočna. Više narudžbi poboljšat će točnost."
   },
   "trend": {
     "title": "Trend isporuka",

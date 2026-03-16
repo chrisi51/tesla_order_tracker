@@ -38,7 +38,9 @@
     "actions": "Acties",
     "new": "Nieuw",
     "projectSupport": "Dit project ondersteunen",
-    "reset": "Resetten"
+    "reset": "Resetten",
+    "ordersRefreshed": "{count} bestellingen vernieuwd",
+    "refreshError": "Fout bij het vernieuwen"
   },
   "home": {
     "title": "Tesla bestellingen en statistieken",
@@ -594,7 +596,8 @@
       "low": "Lage betrouwbaarheid"
     },
     "basedOn": "Gebaseerd op {count} bestellingen",
-    "notEnoughData": "Onvoldoende gegevens voor voorspelling. Selecteer een voertuigtype."
+    "notEnoughData": "Onvoldoende gegevens voor voorspelling. Selecteer een voertuigtype.",
+    "lowDataHint": "Weinig gegevens — de voorspelling kan onnauwkeurig zijn. Meer bestellingen verbeteren de nauwkeurigheid."
   },
   "trend": {
     "title": "Leveringstrend",

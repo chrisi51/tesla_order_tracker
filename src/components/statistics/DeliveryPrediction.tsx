@@ -42,18 +42,19 @@ export function DeliveryPrediction({ orders }: DeliveryPredictionProps) {
 
   const prediction: PredictionType | null = useMemo(() => {
     if (!vehicleType) return null
-    return predictDelivery(orders, vehicleType, model || undefined, country || undefined, drive || undefined, orderDate || undefined)
+    const opt = (v: string) => v && v !== '_any' ? v : undefined
+    return predictDelivery(orders, vehicleType, opt(model), opt(country), opt(drive), orderDate || undefined)
   }, [orders, vehicleType, model, country, drive, orderDate])
 
   return (
     <div className="space-y-4">
       {/* Form */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <Select value={vehicleType} onValueChange={(v) => { setVehicleType(v); setModel('') }}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={t('selectVehicle')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {VEHICLE_TYPES.map(vt => (
               <SelectItem key={vt.value} value={vt.value}>{vt.label}</SelectItem>
             ))}
@@ -61,10 +62,10 @@ export function DeliveryPrediction({ orders }: DeliveryPredictionProps) {
         </Select>
 
         <Select value={model} onValueChange={setModel} disabled={!vehicleType}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={t('selectModel')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="_any">{tc('all')}</SelectItem>
             {modelOptions.map(m => (
               <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
@@ -73,10 +74,10 @@ export function DeliveryPrediction({ orders }: DeliveryPredictionProps) {
         </Select>
 
         <Select value={country} onValueChange={setCountry}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={t('selectCountry')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="_any">{tc('all')}</SelectItem>
             {COUNTRIES.map(c => (
               <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
@@ -85,10 +86,10 @@ export function DeliveryPrediction({ orders }: DeliveryPredictionProps) {
         </Select>
 
         <Select value={drive} onValueChange={setDrive}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={t('selectDrive')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="_any">{tc('all')}</SelectItem>
             {DRIVES.map(d => (
               <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
@@ -115,14 +116,21 @@ export function DeliveryPrediction({ orders }: DeliveryPredictionProps) {
             exit={{ opacity: 0, y: -10 }}
             className="space-y-3"
           >
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="outline" className={confidenceColors[prediction.confidence]}>
-                <Sparkles className="h-3 w-3 mr-1" />
-                {t(`confidence.${prediction.confidence}`)}
-              </Badge>
-              <span className="text-xs text-muted-foreground">
-                {t('basedOn', { count: prediction.sampleSize })}
-              </span>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge variant="outline" className={confidenceColors[prediction.confidence]}>
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  {t(`confidence.${prediction.confidence}`)}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  {t('basedOn', { count: prediction.sampleSize })}
+                </span>
+              </div>
+              {prediction.confidence === 'low' && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  {t('lowDataHint')}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-3 gap-3">

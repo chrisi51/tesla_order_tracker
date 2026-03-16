@@ -38,7 +38,9 @@
     "actions": "Handlinger",
     "new": "Ny",
     "projectSupport": "Støt dette projekt",
-    "reset": "Nulstil"
+    "reset": "Nulstil",
+    "ordersRefreshed": "{count} bestillinger opdateret",
+    "refreshError": "Fejl ved opdatering"
   },
   "home": {
     "title": "Tesla-bestillinger og statistik",
@@ -594,7 +596,8 @@
       "low": "Lav pålidelighed"
     },
     "basedOn": "Baseret på {count} bestillinger",
-    "notEnoughData": "Ikke nok data til forudsigelse. Vælg en køretøjstype."
+    "notEnoughData": "Ikke nok data til forudsigelse. Vælg en køretøjstype.",
+    "lowDataHint": "Få datapunkter — prognosen kan være unøjagtig. Flere bestillinger vil forbedre nøjagtigheden."
   },
   "trend": {
     "title": "Leveringstendens",

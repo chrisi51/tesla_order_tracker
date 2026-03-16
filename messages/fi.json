@@ -38,7 +38,9 @@
     "actions": "Toiminnot",
     "new": "Uusi",
     "projectSupport": "Tue tätä projektia",
-    "reset": "Nollaa"
+    "reset": "Nollaa",
+    "ordersRefreshed": "{count} tilausta päivitetty",
+    "refreshError": "Virhe päivittäessä"
   },
   "home": {
     "title": "Tesla-tilaukset ja tilastot",
@@ -594,7 +596,8 @@
       "low": "Matala luotettavuus"
     },
     "basedOn": "Perustuu {count} tilaukseen",
-    "notEnoughData": "Ei riittävästi dataa ennustetta varten. Valitse ajoneuvotyyppi."
+    "notEnoughData": "Ei riittävästi dataa ennustetta varten. Valitse ajoneuvotyyppi.",
+    "lowDataHint": "Vähän datapisteitä — ennuste voi olla epätarkka. Lisää tilauksia parantaa tarkkuutta."
   },
   "trend": {
     "title": "Toimitustrendi",
