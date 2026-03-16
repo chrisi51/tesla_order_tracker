@@ -332,7 +332,14 @@
     "allDrives": "Všetky pohony",
     "speed": "Rýchlosť",
     "speedShort": "Rýchlosť",
-    "vinsThisWeek": "VINy tento týždeň"
+    "vinsThisWeek": "VINy tento týždeň",
+    "orderSources": "Zdroje",
+    "deliveryPipeline": "Pipeline dodania",
+    "timelineOrder": "Objednávka",
+    "timelineVin": "VIN",
+    "timelineProduction": "Výroba",
+    "timelinePapers": "Dokumenty",
+    "timelineDelivery": "Dodanie"
   },
   "admin": {
     "dashboard": "Administrátorský panel",
@@ -619,7 +626,7 @@
     "description": "Krajiny zoradené podľa mediánu času dodania",
     "country": "Krajina",
     "avgWait": "Priem. čakanie",
-    "medianWait": "Medián",
+    "medianWait": "Čakacia doba",
     "orders": "Objednávky"
   },
   "hero": {

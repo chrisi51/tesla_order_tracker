@@ -332,7 +332,14 @@
     "allDrives": "Kaikki vetotavat",
     "speed": "Nopeus",
     "speedShort": "Nopeus",
-    "vinsThisWeek": "VINit tällä viikolla"
+    "vinsThisWeek": "VINit tällä viikolla",
+    "orderSources": "Lähteet",
+    "deliveryPipeline": "Toimitusputki",
+    "timelineOrder": "Tilaus",
+    "timelineVin": "VIN",
+    "timelineProduction": "Tuotanto",
+    "timelinePapers": "Asiakirjat",
+    "timelineDelivery": "Toimitus"
   },
   "admin": {
     "dashboard": "Ylläpidon hallintapaneeli",
@@ -619,7 +626,7 @@
     "description": "Maat järjestettynä mediaanitoimitusajan mukaan",
     "country": "Maa",
     "avgWait": "Keskim. odotus",
-    "medianWait": "Mediaani",
+    "medianWait": "Odotusaika",
     "orders": "Tilaukset"
   },
   "hero": {

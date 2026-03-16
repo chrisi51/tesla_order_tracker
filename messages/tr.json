@@ -332,7 +332,14 @@
     "allDrives": "Tüm tahrikler",
     "speed": "Hız",
     "speedShort": "Hız",
-    "vinsThisWeek": "Bu hafta VINler"
+    "vinsThisWeek": "Bu hafta VINler",
+    "orderSources": "Kaynaklar",
+    "deliveryPipeline": "Teslimat hattı",
+    "timelineOrder": "Sipariş",
+    "timelineVin": "VIN",
+    "timelineProduction": "Üretim",
+    "timelinePapers": "Belgeler",
+    "timelineDelivery": "Teslimat"
   },
   "admin": {
     "dashboard": "Yönetici Paneli",
@@ -619,7 +626,7 @@
     "description": "Ülkeler medyan teslimat süresine göre sıralanmış",
     "country": "Ülke",
     "avgWait": "Ort. bekleme",
-    "medianWait": "Medyan",
+    "medianWait": "Bekleme süresi",
     "orders": "Siparişler"
   },
   "hero": {

@@ -332,7 +332,14 @@
     "allDrives": "Alle drivlinjer",
     "speed": "Hastighet",
     "speedShort": "Hastighet",
-    "vinsThisWeek": "VINs denne uken"
+    "vinsThisWeek": "VINs denne uken",
+    "orderSources": "Kilder",
+    "deliveryPipeline": "Leveringspipeline",
+    "timelineOrder": "Bestilling",
+    "timelineVin": "VIN",
+    "timelineProduction": "Produksjon",
+    "timelinePapers": "Papirer",
+    "timelineDelivery": "Levering"
   },
   "admin": {
     "dashboard": "Administrasjonspanel",
@@ -619,7 +626,7 @@
     "description": "Land rangert etter median leveringstid",
     "country": "Land",
     "avgWait": "Gj.sn. ventetid",
-    "medianWait": "Median",
+    "medianWait": "Ventetid",
     "orders": "Bestillinger"
   },
   "hero": {

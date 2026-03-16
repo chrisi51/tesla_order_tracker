@@ -332,7 +332,14 @@
     "allDrives": "所有驱动",
     "speed": "速度",
     "speedShort": "速度",
-    "vinsThisWeek": "本周 VIN"
+    "vinsThisWeek": "本周 VIN",
+    "orderSources": "来源",
+    "deliveryPipeline": "交付流程",
+    "timelineOrder": "订单",
+    "timelineVin": "VIN",
+    "timelineProduction": "生产",
+    "timelinePapers": "文件",
+    "timelineDelivery": "交付"
   },
   "admin": {
     "dashboard": "管理员仪表板",
@@ -619,7 +626,7 @@
     "description": "按中位交付时间排列的国家",
     "country": "国家",
     "avgWait": "平均等待",
-    "medianWait": "中位数",
+    "medianWait": "等待时间",
     "orders": "订单"
   },
   "hero": {

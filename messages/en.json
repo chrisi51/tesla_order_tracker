@@ -332,7 +332,14 @@
     "allDrives": "All drives",
     "speed": "Speed",
     "speedShort": "Speed",
-    "vinsThisWeek": "VINs this week"
+    "vinsThisWeek": "VINs this week",
+    "orderSources": "Sources",
+    "deliveryPipeline": "Delivery Pipeline",
+    "timelineOrder": "Order",
+    "timelineVin": "VIN",
+    "timelineProduction": "Production",
+    "timelinePapers": "Papers",
+    "timelineDelivery": "Delivery"
   },
   "admin": {
     "dashboard": "Admin Dashboard",
@@ -619,7 +626,7 @@
     "description": "Countries ranked by median delivery time",
     "country": "Country",
     "avgWait": "Avg wait",
-    "medianWait": "Median",
+    "medianWait": "Wait Time",
     "orders": "Orders"
   },
   "hero": {

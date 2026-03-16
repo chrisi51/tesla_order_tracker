@@ -69,6 +69,8 @@ export interface OrderStatistics {
   tostOrders: number
   manualOrders: number
   vinsThisWeek: number
+  avgVinToProduction: number | null
+  avgProductionToPapers: number | null
 }
 
 // Period filter types
@@ -599,6 +601,16 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     return d >= weekStart && d < weekEnd
   }).length
 
+  // Pipeline segment: VIN → Production
+  const avgVinToProduction = calculateAverage(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.vinReceivedDate, o.productionDate))
+  )
+
+  // Pipeline segment: Production → Papers
+  const avgProductionToPapers = calculateAverage(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.productionDate, o.papersReceivedDate))
+  )
+
   return {
     totalOrders,
     deliveredOrders,
@@ -627,6 +639,8 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     tostOrders,
     manualOrders,
     vinsThisWeek,
+    avgVinToProduction,
+    avgProductionToPapers,
   }
 }
 

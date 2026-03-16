@@ -332,7 +332,14 @@
     "allDrives": "Összes meghajtás",
     "speed": "Sebesség",
     "speedShort": "Sebesség",
-    "vinsThisWeek": "VIN-ek ezen a héten"
+    "vinsThisWeek": "VIN-ek ezen a héten",
+    "orderSources": "Források",
+    "deliveryPipeline": "Szállítási folyamat",
+    "timelineOrder": "Rendelés",
+    "timelineVin": "VIN",
+    "timelineProduction": "Gyártás",
+    "timelinePapers": "Dokumentumok",
+    "timelineDelivery": "Kiszállítás"
   },
   "admin": {
     "dashboard": "Rendszergazdai kezelőpanel",
@@ -619,7 +626,7 @@
     "description": "Országok rangsorolása a medián szállítási idő alapján",
     "country": "Ország",
     "avgWait": "Átl. várakozás",
-    "medianWait": "Medián",
+    "medianWait": "Várakozási idő",
     "orders": "Rendelések"
   },
   "hero": {

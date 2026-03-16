@@ -38,12 +38,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Plus, RefreshCw, Car, BarChart3, Copy, Check, KeyRound, ChevronUp } from 'lucide-react'
+import { Plus, RefreshCw, Car, BarChart3, Copy, Check, KeyRound, ChevronUp, Calculator } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export default function Home() {
   const t = useTranslations('home')
   const tc = useTranslations('common')
+  const tp = useTranslations('prediction')
   const [orders, setOrders] = useState<Order[]>([])
   const [settings, setSettings] = useState<Settings | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -59,6 +60,7 @@ export default function Home() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [tostFieldsOrder, setTostFieldsOrder] = useState<Order | null>(null)
   const [showStats, setShowStats] = useState(true)
+  const [showPrediction, setShowPrediction] = useState(false)
   // Search state
   const [showSearch, setShowSearch] = useState(false)
   const [expandedQuarters, setExpandedQuarters] = useState<string[]>([])
@@ -285,7 +287,6 @@ export default function Home() {
       <Header
         isAdmin={isAdmin}
         settings={settings}
-        onSearchOpen={() => setShowSearch(true)}
       />
 
       <main className="w-full max-w-[98vw] mx-auto px-4 py-6 space-y-8">
@@ -302,7 +303,7 @@ export default function Home() {
           />
         )}
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -313,12 +314,19 @@ export default function Home() {
             {showStats ? t('hideStats') : t('showStats')}
             <ChevronUp className={`h-4 w-4 transition-transform duration-200 ${showStats ? '' : 'rotate-180'}`} />
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowPrediction(true)}
+            className="gap-2"
+          >
+            <Calculator className="h-4 w-4" />
+            {tp('title')}
+          </Button>
         </div>
 
         {showStats && !loading && (
           <>
-            {/* Delivery Prediction */}
-            <DeliveryPrediction orders={filteredOrders} />
             <StatisticsDashboard
               orders={filteredOrders}
               selectedPeriod={globalFilters.period}
@@ -392,6 +400,20 @@ export default function Home() {
         orderCount={orders.length}
         deliveredCount={orders.filter(o => o.deliveryDate).length}
       />
+
+      {/* Delivery Prediction Dialog */}
+      <Dialog open={showPrediction} onOpenChange={setShowPrediction}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-primary" />
+              {tp('title')}
+            </DialogTitle>
+            <DialogDescription>{tp('description')}</DialogDescription>
+          </DialogHeader>
+          <DeliveryPrediction orders={filteredOrders} />
+        </DialogContent>
+      </Dialog>
 
       {/* Order Search */}
       <OrderSearch

@@ -332,7 +332,14 @@
     "allDrives": "Svi pogoni",
     "speed": "Brzina",
     "speedShort": "Brzina",
-    "vinsThisWeek": "VINovi ovaj tjedan"
+    "vinsThisWeek": "VINovi ovaj tjedan",
+    "orderSources": "Izvori",
+    "deliveryPipeline": "Pipeline isporuke",
+    "timelineOrder": "Narudžba",
+    "timelineVin": "VIN",
+    "timelineProduction": "Proizvodnja",
+    "timelinePapers": "Dokumenti",
+    "timelineDelivery": "Isporuka"
   },
   "admin": {
     "dashboard": "Administratorska ploča",
@@ -619,7 +626,7 @@
     "description": "Države rangirane po medijalnom vremenu isporuke",
     "country": "Država",
     "avgWait": "Prosječno čekanje",
-    "medianWait": "Medijan",
+    "medianWait": "Vrijeme čekanja",
     "orders": "Narudžbe"
   },
   "hero": {

@@ -332,7 +332,14 @@
     "allDrives": "Tutte le trazioni",
     "speed": "Velocità",
     "speedShort": "Velocità",
-    "vinsThisWeek": "VINs questa settimana"
+    "vinsThisWeek": "VINs questa settimana",
+    "orderSources": "Fonti",
+    "deliveryPipeline": "Pipeline di consegna",
+    "timelineOrder": "Ordine",
+    "timelineVin": "VIN",
+    "timelineProduction": "Produzione",
+    "timelinePapers": "Documenti",
+    "timelineDelivery": "Consegna"
   },
   "admin": {
     "dashboard": "Pannello di amministrazione",
@@ -619,7 +626,7 @@
     "description": "Paesi classificati per tempo mediano di consegna",
     "country": "Paese",
     "avgWait": "Attesa media",
-    "medianWait": "Mediana",
+    "medianWait": "Attesa",
     "orders": "Ordini"
   },
   "hero": {

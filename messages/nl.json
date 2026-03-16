@@ -332,7 +332,14 @@
     "allDrives": "Alle aandrijvingen",
     "speed": "Snelheid",
     "speedShort": "Snelheid",
-    "vinsThisWeek": "VINs deze week"
+    "vinsThisWeek": "VINs deze week",
+    "orderSources": "Bronnen",
+    "deliveryPipeline": "Leveringspijplijn",
+    "timelineOrder": "Bestelling",
+    "timelineVin": "VIN",
+    "timelineProduction": "Productie",
+    "timelinePapers": "Papieren",
+    "timelineDelivery": "Levering"
   },
   "admin": {
     "dashboard": "Beheerdersdashboard",
@@ -619,7 +626,7 @@
     "description": "Landen gerangschikt op mediaan levertijd",
     "country": "Land",
     "avgWait": "Gem. wachttijd",
-    "medianWait": "Mediaan",
+    "medianWait": "Wachttijd",
     "orders": "Bestellingen"
   },
   "hero": {

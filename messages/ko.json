@@ -332,7 +332,14 @@
     "allDrives": "모든 구동 방식",
     "speed": "속도",
     "speedShort": "속도",
-    "vinsThisWeek": "이번 주 VIN"
+    "vinsThisWeek": "이번 주 VIN",
+    "orderSources": "출처",
+    "deliveryPipeline": "배송 파이프라인",
+    "timelineOrder": "주문",
+    "timelineVin": "VIN",
+    "timelineProduction": "생산",
+    "timelinePapers": "서류",
+    "timelineDelivery": "배송"
   },
   "admin": {
     "dashboard": "관리자 대시보드",
@@ -619,7 +626,7 @@
     "description": "중위 인도 시간별 국가 순위",
     "country": "국가",
     "avgWait": "평균 대기",
-    "medianWait": "중위값",
+    "medianWait": "대기 시간",
     "orders": "주문"
   },
   "hero": {

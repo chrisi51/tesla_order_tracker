@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Order, VehicleType } from '@/lib/types'
 import { calculateStatistics, StatsPeriod } from '@/lib/statistics'
 import { StatCard } from './StatCard'
+import { DeliveryTimeline } from './DeliveryTimeline'
 import { CountryDistributionChart } from './CountryDistributionChart'
 import { OrdersTimelineChart } from './OrdersTimelineChart'
 import { DeliveryTimelineChart } from './DeliveryTimelineChart'
@@ -14,18 +15,14 @@ import { VinWeekdayChart } from './VinWeekdayChart'
 import { MiniPieChart } from './ConfigDistributionCharts'
 import { EmptyState } from '@/components/EmptyState'
 import { DeliveryTrendChart } from './DeliveryTrendChart'
-import { ConfigDeliveryInsights } from './ConfigDeliveryInsights'
 import { VinActivityChart } from './VinActivityChart'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import {
-  Clock,
   Car,
   CheckCircle2,
-  Timer,
-  FileText,
   TrendingUp,
   BarChart3,
   Globe,
@@ -37,7 +34,6 @@ import {
   Zap,
   MapPin,
   Users,
-  Link2,
 } from 'lucide-react'
 
 interface StatisticsDashboardProps {
@@ -81,7 +77,7 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
           tabsRef.current?.querySelector('[role="tabpanel"]')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         }, 50)
       }}>
-        <TabsList className="sticky-tabs flex w-full overflow-x-auto flex-nowrap gap-1 sm:grid sm:grid-cols-6">
+        <TabsList className="sticky-tabs flex w-full overflow-x-auto flex-nowrap gap-1 sm:grid sm:grid-cols-5">
           <TabsTrigger value="overview" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
             <BarChart3 className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('overviewShort')}</span>
@@ -105,11 +101,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
             <TrendingUp className="h-4 w-4 shrink-0" />
             <span className="sm:hidden">{t('timelineShort')}</span>
             <span className="hidden sm:inline">{t('timeline')}</span>
-          </TabsTrigger>
-          <TabsTrigger value="speed" className="flex items-center gap-1.5 text-xs sm:text-sm px-3 sm:px-4 py-2.5 whitespace-nowrap">
-            <Zap className="h-4 w-4 shrink-0" />
-            <span className="sm:hidden">{t('speedShort')}</span>
-            <span className="hidden sm:inline">{t('speed')}</span>
           </TabsTrigger>
         </TabsList>
 
@@ -156,7 +147,10 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                   />
                 </div>
 
-                {/* Secondary row: remaining 6 cards */}
+                {/* Delivery pipeline timeline */}
+                <DeliveryTimeline stats={stats} />
+
+                {/* Secondary row */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   <StatCard
                     label={t('pending')}
@@ -169,44 +163,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                     delay={0.2}
                   />
                   <StatCard
-                    label={t('avgDeliveryTime')}
-                    value={stats.avgOrderToDelivery !== null ? `${stats.avgOrderToDelivery} ${tc('days')}` : '-'}
-                    icon={Timer}
-                    hint={t('hintAvgDelivery')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.3}
-                  />
-                  <StatCard
-                    label={t('avgOrderToVin')}
-                    value={stats.avgOrderToVin !== null ? `${stats.avgOrderToVin} ${tc('days')}` : '-'}
-                    icon={Clock}
-                    hint={t('hintAvgVin')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.4}
-                  />
-                  <StatCard
-                    label={t('avgOrderToPapers')}
-                    value={stats.avgOrderToPapers !== null ? `${stats.avgOrderToPapers} ${tc('days')}` : '-'}
-                    icon={FileText}
-                    hint={stats.avgOrderToPapers === null
-                      ? t('hintAvgPapersNull')
-                      : t('hintAvgPapers')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.5}
-                  />
-                  <StatCard
-                    label={t('avgPapersToDelivery')}
-                    value={stats.avgPapersToDelivery !== null ? `${stats.avgPapersToDelivery} ${tc('days')}` : '-'}
-                    icon={TrendingUp}
-                    hint={t('hintPapersToDelivery')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.6}
-                  />
-                  <StatCard
                     label={t('deliveryRate')}
                     value={`${stats.totalOrders > 0 ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0}%`}
                     icon={CheckCircle2}
@@ -216,26 +172,42 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                     minimal
                     delay={0.7}
                   />
-                  <StatCard
-                    label={t('manualOrders')}
-                    value={stats.manualOrders}
-                    icon={Users}
-                    description={`${stats.totalOrders > 0 ? Math.round((stats.manualOrders / stats.totalOrders) * 100) : 0}%`}
-                    hint={t('hintManualOrders')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.8}
-                  />
-                  <StatCard
-                    label={t('tostOrders')}
-                    value={stats.tostOrders}
-                    icon={Link2}
-                    description={`${stats.totalOrders > 0 ? Math.round((stats.tostOrders / stats.totalOrders) * 100) : 0}%`}
-                    hint={t('hintTostOrders')}
-                    semanticColor="data"
-                    minimal
-                    delay={0.9}
-                  />
+                  {/* Order Sources: Webapp + TOST stacked bar */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.8 }}
+                    className="rounded-xl border bg-card p-4 space-y-2"
+                  >
+                    <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                      <Users className="h-4 w-4" />
+                      {t('orderSources')}
+                    </div>
+                    {stats.totalOrders > 0 && (
+                      <>
+                        <div className="flex h-4 w-full overflow-hidden rounded-full">
+                          <div
+                            className="bg-primary transition-all"
+                            style={{ width: `${Math.round((stats.manualOrders / stats.totalOrders) * 100)}%` }}
+                          />
+                          <div
+                            className="bg-primary/40 transition-all"
+                            style={{ width: `${Math.round((stats.tostOrders / stats.totalOrders) * 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1.5">
+                            <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary" />
+                            {t('manualOrders')} {stats.manualOrders} ({Math.round((stats.manualOrders / stats.totalOrders) * 100)}%)
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary/40" />
+                            {t('tostOrders')} {stats.tostOrders} ({Math.round((stats.tostOrders / stats.totalOrders) * 100)}%)
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
                   <StatCard
                     label={t('vinsThisWeek')}
                     value={stats.vinsThisWeek}
@@ -346,7 +318,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                         <TableRow>
                           <TableHead>#</TableHead>
                           <TableHead>{tcd('country')}</TableHead>
-                          <TableHead className="text-right tabular-nums">{tcd('avgWait')}</TableHead>
                           <TableHead className="text-right tabular-nums">{tcd('medianWait')}</TableHead>
                           <TableHead className="text-right tabular-nums">{tcd('orders')}</TableHead>
                         </TableRow>
@@ -358,7 +329,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
                               {i === 0 ? '\u{1F947}' : i === 1 ? '\u{1F948}' : i === 2 ? '\u{1F949}' : i + 1}
                             </TableCell>
                             <TableCell>{row.country}</TableCell>
-                            <TableCell className="text-right tabular-nums">{row.avgDays}d</TableCell>
                             <TableCell className="text-right tabular-nums font-medium">{row.medianDays}d</TableCell>
                             <TableCell className="text-right tabular-nums">{row.count}</TableCell>
                           </TableRow>
@@ -459,30 +429,6 @@ export function StatisticsDashboard({ orders, selectedPeriod, selectedVehicle }:
           </motion.div>
         </TabsContent>
 
-        {/* Tab 6: Speed - Config Delivery Insights */}
-        <TabsContent value="speed" className="mt-6">
-          <motion.div
-            key="speed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Card className="relative shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                  <div className="rounded-lg bg-blue-500/10 p-1.5">
-                    <Zap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  {t('speed')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-5 sm:p-6 pt-0 sm:pt-0">
-                <ConfigDeliveryInsights orders={orders} />
-              </CardContent>
-              <span className="absolute bottom-2 right-3 text-[9px] opacity-[0.15] text-foreground select-none pointer-events-none">tff-order-stats.de</span>
-            </Card>
-          </motion.div>
-        </TabsContent>
       </Tabs>
     </motion.div>
   )

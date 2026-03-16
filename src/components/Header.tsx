@@ -15,26 +15,22 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import {
-  Search,
   Plus,
   LogIn,
   Coffee,
   Github,
   Code2,
   Menu,
-  LayoutDashboard,
 } from 'lucide-react'
 
 interface HeaderProps {
   isAdmin: boolean
   settings: { showDonation?: boolean; donationUrl?: string } | null
-  onSearchOpen: () => void
 }
 
-export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
+export function Header({ isAdmin, settings }: HeaderProps) {
   const t = useTranslations('home')
   const tc = useTranslations('common')
-  const ts = useTranslations('search')
   const tn = useTranslations('nav')
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -59,12 +55,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
 
           {/* Desktop nav (>=1024px) */}
           <nav className="hidden lg:flex items-center gap-1">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
-                <LayoutDashboard className="h-4 w-4" />
-                {tn('dashboard')}
-              </Button>
-            </Link>
             <Link href="/new">
               <Button size="sm" className="gap-2 shadow-sm">
                 <Plus className="h-4 w-4" />
@@ -105,19 +95,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
 
             <div className="w-px h-5 bg-border mx-2" />
 
-            {/* Search */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onSearchOpen}
-              className="gap-2 text-muted-foreground border-input/60 bg-muted/30 hover:bg-muted/50"
-            >
-              <Search className="h-4 w-4" />
-              {ts('openSearch')}
-              <kbd className="pointer-events-none ml-1 hidden h-5 select-none items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 lg:flex">
-                <span className="text-xs">&#8984;</span>K
-              </kbd>
-            </Button>
             <LanguageSwitcher />
             <ThemeToggle />
 
@@ -140,11 +117,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
 
           {/* Tablet nav (640-1024px): icon-only */}
           <nav className="hidden sm:flex lg:hidden items-center gap-1">
-            <Link href="/">
-              <Button variant="ghost" size="icon" className="h-9 w-9" title="Dashboard">
-                <LayoutDashboard className="h-4 w-4" />
-              </Button>
-            </Link>
             <Link href="/new">
               <Button size="icon" className="h-9 w-9 shadow-sm" title={t('newOrder')}>
                 <Plus className="h-4 w-4" />
@@ -153,15 +125,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
 
             <div className="w-px h-5 bg-border mx-1" />
 
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={onSearchOpen}
-              className="h-9 w-9 text-muted-foreground"
-              title={ts('openSearch')}
-            >
-              <Search className="h-4 w-4" />
-            </Button>
             <LanguageSwitcher />
             <ThemeToggle />
 
@@ -182,15 +145,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
 
           {/* Mobile nav (<640px) */}
           <div className="flex sm:hidden items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onSearchOpen}
-              className="h-9 w-9"
-            >
-              <Search className="h-4 w-4" />
-              <span className="sr-only">{ts('openSearch')}</span>
-            </Button>
             <LanguageSwitcher />
             <ThemeToggle />
             <Button
@@ -214,12 +168,6 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
             <SheetDescription className="sr-only">{tn('navigationMenu')}</SheetDescription>
           </SheetHeader>
           <nav className="mt-6 flex flex-col gap-2">
-            <Link href="/" onClick={() => setMobileOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                <LayoutDashboard className="h-4 w-4" />
-                {tn('dashboard')}
-              </Button>
-            </Link>
             <Link href="/new" onClick={() => setMobileOpen(false)}>
               <Button className="w-full justify-start gap-2">
                 <Plus className="h-4 w-4" />
@@ -288,7 +236,7 @@ export function Header({ isAdmin, settings, onSearchOpen }: HeaderProps) {
  * Self-contained header wrapper that fetches its own data.
  * Used in layout.tsx (server component) to avoid prop drilling.
  */
-export function HeaderWithData({ onSearchOpen }: { onSearchOpen: () => void }) {
+export function HeaderWithData() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [settings, setSettings] = useState<{ showDonation?: boolean; donationUrl?: string } | null>(null)
 
@@ -315,7 +263,6 @@ export function HeaderWithData({ onSearchOpen }: { onSearchOpen: () => void }) {
     <Header
       isAdmin={isAdmin}
       settings={settings}
-      onSearchOpen={onSearchOpen}
     />
   )
 }

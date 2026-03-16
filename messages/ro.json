@@ -332,7 +332,14 @@
     "allDrives": "Toate tracțiunile",
     "speed": "Viteză",
     "speedShort": "Viteză",
-    "vinsThisWeek": "VINuri săptămâna aceasta"
+    "vinsThisWeek": "VINuri săptămâna aceasta",
+    "orderSources": "Surse",
+    "deliveryPipeline": "Pipeline livrare",
+    "timelineOrder": "Comandă",
+    "timelineVin": "VIN",
+    "timelineProduction": "Producție",
+    "timelinePapers": "Documente",
+    "timelineDelivery": "Livrare"
   },
   "admin": {
     "dashboard": "Panou de administrare",
@@ -619,7 +626,7 @@
     "description": "Țări clasate după timpul median de livrare",
     "country": "Țară",
     "avgWait": "Așteptare medie",
-    "medianWait": "Mediană",
+    "medianWait": "Timp de așteptare",
     "orders": "Comenzi"
   },
   "hero": {

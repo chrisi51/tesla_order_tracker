@@ -332,7 +332,14 @@
     "allDrives": "すべての駆動方式",
     "speed": "スピード",
     "speedShort": "速度",
-    "vinsThisWeek": "今週の VIN"
+    "vinsThisWeek": "今週の VIN",
+    "orderSources": "ソース",
+    "deliveryPipeline": "納車パイプライン",
+    "timelineOrder": "注文",
+    "timelineVin": "VIN",
+    "timelineProduction": "製造",
+    "timelinePapers": "書類",
+    "timelineDelivery": "納車"
   },
   "admin": {
     "dashboard": "管理者ダッシュボード",
@@ -619,7 +626,7 @@
     "description": "中央値の納車時間でランク付けされた国",
     "country": "国",
     "avgWait": "平均待ち",
-    "medianWait": "中央値",
+    "medianWait": "待ち時間",
     "orders": "注文"
   },
   "hero": {

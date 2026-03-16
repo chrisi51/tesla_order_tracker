@@ -332,7 +332,14 @@
     "allDrives": "Όλες οι κινήσεις",
     "speed": "Ταχύτητα",
     "speedShort": "Ταχύτ.",
-    "vinsThisWeek": "VINs αυτή την εβδομάδα"
+    "vinsThisWeek": "VINs αυτή την εβδομάδα",
+    "orderSources": "Πηγές",
+    "deliveryPipeline": "Σωλήνας παράδοσης",
+    "timelineOrder": "Παραγγελία",
+    "timelineVin": "VIN",
+    "timelineProduction": "Παραγωγή",
+    "timelinePapers": "Έγγραφα",
+    "timelineDelivery": "Παράδοση"
   },
   "admin": {
     "dashboard": "Πίνακας Ελέγχου Διαχειριστή",
@@ -619,7 +626,7 @@
     "description": "Χώρες ταξινομημένες κατά διάμεσο χρόνο παράδοσης",
     "country": "Χώρα",
     "avgWait": "Μέση αναμονή",
-    "medianWait": "Διάμεση",
+    "medianWait": "Χρόνος αναμονής",
     "orders": "Παραγγελίες"
   },
   "hero": {

@@ -332,7 +332,14 @@
     "allDrives": "Всички задвижвания",
     "speed": "Скорост",
     "speedShort": "Скорост",
-    "vinsThisWeek": "VIN номера тази седмица"
+    "vinsThisWeek": "VIN номера тази седмица",
+    "orderSources": "Източници",
+    "deliveryPipeline": "Тръбопровод за доставка",
+    "timelineOrder": "Поръчка",
+    "timelineVin": "VIN",
+    "timelineProduction": "Производство",
+    "timelinePapers": "Документи",
+    "timelineDelivery": "Доставка"
   },
   "admin": {
     "dashboard": "Административен панел",
@@ -619,7 +626,7 @@
     "description": "Държави, класирани по средно време за доставка",
     "country": "Държава",
     "avgWait": "Средно чакане",
-    "medianWait": "Медиана",
+    "medianWait": "Време на изчакване",
     "orders": "Поръчки"
   },
   "hero": {
