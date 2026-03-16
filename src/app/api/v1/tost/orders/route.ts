@@ -38,8 +38,10 @@ function buildOrderData(body: Record<string, unknown>) {
 // POST /api/v1/tost/orders - Create a new TOST-managed order
 export const POST = withTostAuth(async (request: NextRequest) => {
   let bodyName: string | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let body: any = {}
   try {
-    const body = await request.json()
+    body = await request.json()
     bodyName = body?.name as string | undefined
 
     if (!body.name?.trim()) {
@@ -70,7 +72,28 @@ export const POST = withTostAuth(async (request: NextRequest) => {
     console.error('TOST orders POST error:', error)
     const errorMsg = error instanceof Error ? error.message : 'Unknown error'
     if (errorMsg.includes('Unique constraint')) {
-      // Check if there's an existing order with the same name that could be claimed
+      // If the conflicting order is already TOST-owned, upsert it (idempotent retry)
+      if (body?.id) {
+        const existing = await prisma.order.findUnique({
+          where: { id: body.id },
+          select: { id: true, source: true },
+        })
+        if (existing?.source === 'tost') {
+          const timePeriods = calculateTimePeriods(body)
+          const orderData = buildOrderData(body)
+          await prisma.order.update({
+            where: { id: body.id },
+            data: { ...orderData, ...timePeriods },
+          })
+          trackApiEvent({ name: 'tost-create-order-upsert', url: '/api/v1/tost/orders', data: { orderId: body.id } })
+          return createApiSuccessResponse(
+            { id: body.id, message: 'Order already existed (TOST-owned), updated successfully' },
+            { status: 200 }
+          )
+        }
+      }
+
+      // Otherwise, check if there's a webapp order the user could claim
       let existingOrderId: string | null = null
       if (bodyName) {
         const existing = await prisma.order.findFirst({
