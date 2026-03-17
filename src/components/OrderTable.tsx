@@ -151,7 +151,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal, Pencil, Trash2, ArrowUp, ArrowDown, ArrowUpDown, Search, KeyRound, Columns3, FileText } from 'lucide-react'
+import { MoreHorizontal, Pencil, Trash2, ArrowUp, ArrowDown, ArrowUpDown, Search, X, KeyRound, Columns3, FileText } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
   Popover,
@@ -584,8 +584,16 @@ export const OrderTable = memo(function OrderTable({ orders, isAdmin, onEdit, on
             placeholder={tc('searchName')}
             value={localFilters.nameSearch}
             onChange={(e) => setLocalFilters(f => ({ ...f, nameSearch: e.target.value }))}
-            className="h-8 w-[140px] sm:w-[180px] pl-8 text-sm"
+            className="h-8 w-[140px] sm:w-[180px] pl-8 pr-7 text-sm"
           />
+          {localFilters.nameSearch && (
+            <button
+              onClick={() => setLocalFilters(f => ({ ...f, nameSearch: '' }))}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
         {/* VIN pill toggle */}
         <Button
