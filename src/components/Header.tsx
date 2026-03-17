@@ -5,6 +5,12 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import {
@@ -16,6 +22,7 @@ import {
 } from '@/components/ui/sheet'
 import {
   LogIn,
+  Heart,
   Coffee,
   Github,
   Code2,
@@ -54,17 +61,33 @@ export function Header({ isAdmin, settings }: HeaderProps) {
 
           {/* Desktop nav (>=1024px) */}
           <nav className="hidden lg:flex items-center gap-1">
-            {settings?.showDonation && settings?.donationUrl && (
-              <a
-                href={settings.donationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
-                  <Coffee className="h-3.5 w-3.5" />
-                  {tc('support')}
-                </Button>
-              </a>
+            {settings?.showDonation && (settings?.donationUrl || settings?.paypalUrl) && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
+                    <Heart className="h-3.5 w-3.5" />
+                    {tc('support')}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {settings.donationUrl && (
+                    <DropdownMenuItem asChild>
+                      <a href={settings.donationUrl} target="_blank" rel="noopener noreferrer" className="gap-2">
+                        <Coffee className="h-4 w-4" />
+                        Buy Me a Coffee
+                      </a>
+                    </DropdownMenuItem>
+                  )}
+                  {settings.paypalUrl && (
+                    <DropdownMenuItem asChild>
+                      <a href={settings.paypalUrl} target="_blank" rel="noopener noreferrer" className="gap-2">
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .757-.644h6.568c2.175 0 3.906.544 4.996 1.588.322.31.566.66.735 1.04.18.407.263.854.248 1.335-.016.054-.016.108-.032.162a5.58 5.58 0 0 1-.15.823 4.81 4.81 0 0 1-.39 1.014c-.51.97-1.375 1.67-2.585 2.1-.576.205-1.228.35-1.944.433-.283.033-.576.05-.878.05H9.94a.77.77 0 0 0-.758.645l-.924 5.86a.641.641 0 0 1-.633.54H7.07l.006.001z"/><path d="M18.27 7.468c-.01.058-.02.115-.035.173-.636 3.267-2.81 4.394-5.588 4.394h-1.413a.687.687 0 0 0-.679.581l-.723 4.578-.205 1.3a.361.361 0 0 0 .357.417h2.504a.676.676 0 0 0 .668-.57l.027-.144.53-3.355.034-.184a.676.676 0 0 1 .668-.571h.42c2.722 0 4.853-1.105 5.476-4.303.26-1.336.125-2.45-.562-3.234a2.68 2.68 0 0 0-.77-.56l-.107-.05-.002.028z"/></svg>
+                        PayPal
+                      </a>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
             <Link href="/docs">
               <Button variant="ghost" size="icon" className="h-9 w-9" title={tn('apiDocs')}>
@@ -176,7 +199,20 @@ export function Header({ isAdmin, settings }: HeaderProps) {
               >
                 <Button variant="ghost" className="w-full justify-start gap-2">
                   <Coffee className="h-4 w-4" />
-                  {tc('support')}
+                  Buy Me a Coffee
+                </Button>
+              </a>
+            )}
+            {settings?.showDonation && settings?.paypalUrl && (
+              <a
+                href={settings.paypalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+              >
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .757-.644h6.568c2.175 0 3.906.544 4.996 1.588.322.31.566.66.735 1.04.18.407.263.854.248 1.335-.016.054-.016.108-.032.162a5.58 5.58 0 0 1-.15.823 4.81 4.81 0 0 1-.39 1.014c-.51.97-1.375 1.67-2.585 2.1-.576.205-1.228.35-1.944.433-.283.033-.576.05-.878.05H9.94a.77.77 0 0 0-.758.645l-.924 5.86a.641.641 0 0 1-.633.54H7.07l.006.001z"/><path d="M18.27 7.468c-.01.058-.02.115-.035.173-.636 3.267-2.81 4.394-5.588 4.394h-1.413a.687.687 0 0 0-.679.581l-.723 4.578-.205 1.3a.361.361 0 0 0 .357.417h2.504a.676.676 0 0 0 .668-.57l.027-.144.53-3.355.034-.184a.676.676 0 0 1 .668-.571h.42c2.722 0 4.853-1.105 5.476-4.303.26-1.336.125-2.45-.562-3.234a2.68 2.68 0 0 0-.77-.56l-.107-.05-.002.028z"/></svg>
+                  PayPal
                 </Button>
               </a>
             )}

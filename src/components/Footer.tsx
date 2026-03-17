@@ -51,31 +51,35 @@ export function Footer({ settings, orderCount, deliveredCount }: FooterProps) {
           {/* Operated by + donation */}
           <p className="text-sm text-muted-foreground text-center">
             {t('operatedBy')}
-            {settings?.showDonation && settings?.donationUrl && (
+            {settings?.showDonation && (settings?.donationUrl || settings?.paypalUrl) && (
               <>
                 {' · '}
-                <a
-                  href={settings.donationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 hover:text-foreground transition-colors hover:underline underline-offset-4"
-                >
-                  {t('supportDevelopment')}
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-                {settings?.paypalUrl && (
+                {t('supportDevelopment')}:
+                {settings.donationUrl && (
                   <>
-                    {' · '}
+                    {' '}
                     <a
-                      href={settings.paypalUrl}
+                      href={settings.donationUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 hover:text-foreground transition-colors hover:underline underline-offset-4"
                     >
-                      PayPal
+                      Coffee
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   </>
+                )}
+                {settings.donationUrl && settings.paypalUrl && ' · '}
+                {settings.paypalUrl && (
+                  <a
+                    href={settings.paypalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 hover:text-foreground transition-colors hover:underline underline-offset-4"
+                  >
+                    PayPal
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
                 )}
               </>
             )}
