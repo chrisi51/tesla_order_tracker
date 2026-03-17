@@ -24,7 +24,7 @@ import {
 
 interface HeaderProps {
   isAdmin: boolean
-  settings: { showDonation?: boolean; donationUrl?: string } | null
+  settings: { showDonation?: boolean; donationUrl?: string; paypalUrl?: string } | null
 }
 
 export function Header({ isAdmin, settings }: HeaderProps) {
@@ -211,7 +211,7 @@ export function Header({ isAdmin, settings }: HeaderProps) {
  */
 export function HeaderWithData() {
   const [isAdmin, setIsAdmin] = useState(false)
-  const [settings, setSettings] = useState<{ showDonation?: boolean; donationUrl?: string } | null>(null)
+  const [settings, setSettings] = useState<{ showDonation?: boolean; donationUrl?: string; paypalUrl?: string } | null>(null)
 
   const fetchData = useCallback(async () => {
     try {

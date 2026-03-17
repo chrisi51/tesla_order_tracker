@@ -87,6 +87,7 @@ export interface Settings {
   id: string
   showDonation: boolean
   donationUrl: string
+  paypalUrl: string
   donationText: string
   lastSyncTime: string | null
   lastSyncCount: number | null

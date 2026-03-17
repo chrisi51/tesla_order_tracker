@@ -6,7 +6,7 @@ import { Github, Code2, ExternalLink } from 'lucide-react'
 import { TransparencyBar } from '@/components/TransparencyBar'
 
 interface FooterProps {
-  settings: { showDonation?: boolean; donationUrl?: string } | null
+  settings: { showDonation?: boolean; donationUrl?: string; paypalUrl?: string } | null
   orderCount?: number
   deliveredCount?: number
 }
@@ -63,6 +63,20 @@ export function Footer({ settings, orderCount, deliveredCount }: FooterProps) {
                   {t('supportDevelopment')}
                   <ExternalLink className="h-3 w-3" />
                 </a>
+                {settings?.paypalUrl && (
+                  <>
+                    {' · '}
+                    <a
+                      href={settings.paypalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 hover:text-foreground transition-colors hover:underline underline-offset-4"
+                    >
+                      PayPal
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </>
+                )}
               </>
             )}
           </p>

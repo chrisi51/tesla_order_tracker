@@ -1,6 +1,7 @@
 # tff order stats
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://buymeacoffee.com/sven.7687)
+[![PayPal](https://img.shields.io/badge/PayPal-donate-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/svenrosema)
 [![GitHub](https://img.shields.io/badge/GitHub-svenger87-181717?style=for-the-badge&logo=github)](https://github.com/svenger87/tesla_order_tracker)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
@@ -254,6 +255,9 @@ If you find this project helpful, consider supporting its development:
 
 <a href="https://buymeacoffee.com/sven.7687" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50">
+</a>
+<a href="https://paypal.me/svenrosema" target="_blank">
+  <img src="https://img.shields.io/badge/PayPal-donate-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal" height="50">
 </a>
 
 Your support helps cover hosting costs and motivates continued development. Thank you!

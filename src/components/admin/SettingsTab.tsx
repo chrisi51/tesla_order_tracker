@@ -238,6 +238,18 @@ export function SettingsTab() {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="paypalUrl">PayPal URL</Label>
+              <Input
+                id="paypalUrl"
+                value={settings?.paypalUrl ?? ''}
+                onChange={(e) =>
+                  setSettings((s) => s ? { ...s, paypalUrl: e.target.value } : null)
+                }
+                placeholder="https://paypal.me/..."
+              />
+            </div>
+
             <Button onClick={handleSaveSettings} disabled={saving}>
               <Save className="h-4 w-4 mr-2" />
               {saving ? tc('saving') : tc('save')}

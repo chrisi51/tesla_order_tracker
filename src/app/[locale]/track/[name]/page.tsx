@@ -290,6 +290,7 @@ export default async function TrackPage({ params, searchParams }: { params: Prom
       colorInfo={colorInfo ? { hex: colorInfo.hex, border: colorInfo.border, label: colorInfo.label } : null}
       countryInfo={countryInfo ? { label: countryInfo.label, flag: countryInfo.flag } : null}
       donationUrl={settings?.donationUrl}
+      paypalUrl={settings?.paypalUrl}
       resolvedLabels={{
         model: resolve(order.model, allTrims),
         range: resolve(order.range, RANGES),

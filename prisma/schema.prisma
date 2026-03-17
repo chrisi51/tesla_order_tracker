@@ -67,6 +67,7 @@ model Settings {
   id                 String    @id @default("default")
   showDonation       Boolean   @default(true)
   donationUrl        String    @default("https://buymeacoffee.com")
+  paypalUrl          String    @default("")
   donationText       String    @default("Projekt unterstützen")
   lastSyncTime       DateTime?
   lastSyncCount      Int?

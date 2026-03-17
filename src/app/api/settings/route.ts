@@ -56,6 +56,7 @@ export async function PUT(request: NextRequest) {
       data: {
         showDonation: body.showDonation ?? true,
         donationUrl: body.donationUrl || 'https://buymeacoffee.com',
+        paypalUrl: body.paypalUrl ?? '',
         donationText: body.donationText || 'Support this project',
         archiveEnabled: body.archiveEnabled ?? true,
         archiveThreshold: body.archiveThreshold ?? 180,

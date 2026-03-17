@@ -36,6 +36,7 @@ interface TrackingPageClientProps {
   colorInfo: { hex: string; border: boolean; label: string } | null
   countryInfo: { label: string; flag: string } | null
   donationUrl?: string | null
+  paypalUrl?: string | null
   resolvedLabels: {
     model: string | null
     range: string | null
@@ -54,6 +55,7 @@ export function TrackingPageClient({
   colorInfo,
   countryInfo,
   donationUrl,
+  paypalUrl,
   resolvedLabels,
 }: TrackingPageClientProps) {
   const t = useTranslations('tracking')
@@ -313,7 +315,7 @@ export function TrackingPageClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <SupportCard donationUrl={donationUrl} />
+            <SupportCard donationUrl={donationUrl} paypalUrl={paypalUrl ?? undefined} />
           </motion.div>
         )}
 
