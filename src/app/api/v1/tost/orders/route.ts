@@ -3,11 +3,13 @@ import { NextRequest } from 'next/server'
 import { withTostAuth } from '@/lib/tost-auth'
 import { createApiSuccessResponse, ApiErrors } from '@/lib/api-response'
 import { calculateTimePeriods, orderSelectFields } from '@/lib/tost-helpers'
+import { normalizeDateFields } from '@/lib/date-utils'
 import { trackApiEvent } from '@/lib/umami'
 import { ApiOrder } from '@/lib/api-types'
 
 // Build the data fields from a TOST request body
 function buildOrderData(body: Record<string, unknown>) {
+  normalizeDateFields(body)
   return {
     name: (body.name as string).trim(),
     vehicleType: (body.vehicleType as string) || 'Model Y',

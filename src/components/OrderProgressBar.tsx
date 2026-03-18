@@ -7,7 +7,7 @@ import { Order } from '@/lib/types'
 import { getOrderStatus } from '@/lib/statistics'
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { ShoppingCart, Hash, FileText, Car, Check, Calendar } from 'lucide-react'
+import { ShoppingCart, Hash, Factory, FileText, Car, Check, Calendar } from 'lucide-react'
 
 interface OrderProgressBarProps {
   order: Order
@@ -18,18 +18,20 @@ interface OrderProgressBarProps {
 const STEPS = [
   { key: 'ordered', labelKey: 'ordered', icon: ShoppingCart, dateField: 'orderDate' as const },
   { key: 'vin_received', labelKey: 'vinReceived', icon: Hash, dateField: 'vinReceivedDate' as const },
+  { key: 'production', labelKey: 'production', icon: Factory, dateField: 'productionDate' as const },
   { key: 'papers_received', labelKey: 'papers', icon: FileText, dateField: 'papersReceivedDate' as const },
   { key: 'delivered', labelKey: 'delivered', icon: Car, dateField: 'deliveryDate' as const },
 ]
 
-type StepKey = 'ordered' | 'vin_received' | 'papers_received' | 'delivery_scheduled' | 'delivered'
+type StepKey = 'ordered' | 'vin_received' | 'production' | 'papers_received' | 'delivery_scheduled' | 'delivered'
 
 const STEP_INDEX: Record<StepKey, number> = {
   ordered: 0,
   vin_received: 1,
-  papers_received: 2,
-  delivery_scheduled: 3, // Same position as delivered, but different style
-  delivered: 3,
+  production: 2,
+  papers_received: 3,
+  delivery_scheduled: 4, // Same position as delivered, but different style
+  delivered: 4,
 }
 
 // Memoized compact progress bar — no animations, pure CSS
@@ -117,9 +119,11 @@ export function OrderProgressBar({ order, compact = false, barOnly = false }: Or
         ? 'bg-gradient-to-r from-amber-500 to-amber-400'
         : currentStatus === 'papers_received'
           ? 'bg-gradient-to-r from-blue-500 to-blue-400'
-          : currentStatus === 'vin_received'
-            ? 'bg-gradient-to-r from-cyan-500 to-cyan-400'
-            : 'bg-gradient-to-r from-gray-400 to-gray-300'
+          : currentStatus === 'production'
+            ? 'bg-gradient-to-r from-purple-500 to-purple-400'
+            : currentStatus === 'vin_received'
+              ? 'bg-gradient-to-r from-cyan-500 to-cyan-400'
+              : 'bg-gradient-to-r from-gray-400 to-gray-300'
 
     return (
       <div className="h-2.5 w-full bg-muted/50 rounded-full overflow-hidden">

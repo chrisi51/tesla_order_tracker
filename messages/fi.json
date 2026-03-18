@@ -252,6 +252,7 @@
     "ordered": "Tilattu",
     "vinReceived": "VIN vastaanotettu",
     "papers": "Asiakirjat",
+    "production": "Tuotanto",
     "delivered": "Toimitettu",
     "deliveryScheduled": "Toimitus sovittu"
   },

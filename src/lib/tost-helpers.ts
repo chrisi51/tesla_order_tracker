@@ -1,38 +1,4 @@
-import { parse, differenceInDays, isValid } from 'date-fns'
-
-// Helper to parse German date format (DD.MM.YYYY)
-export function parseGermanDate(dateStr: string | null | undefined): Date | null {
-  if (!dateStr) return null
-  // Use fixed reference date to avoid timezone issues around midnight
-  const parsed = parse(dateStr, 'dd.MM.yyyy', new Date(2000, 0, 1))
-  return isValid(parsed) ? parsed : null
-}
-
-export function calculateDaysBetween(
-  fromDate: string | null | undefined,
-  toDate: string | null | undefined
-): number | null {
-  const from = parseGermanDate(fromDate)
-  const to = parseGermanDate(toDate)
-  if (!from || !to) return null
-  return differenceInDays(to, from)
-}
-
-export function calculateTimePeriods(data: {
-  orderDate?: string | null
-  productionDate?: string | null
-  vinReceivedDate?: string | null
-  deliveryDate?: string | null
-  papersReceivedDate?: string | null
-}) {
-  return {
-    orderToProduction: calculateDaysBetween(data.orderDate, data.productionDate),
-    orderToVin: calculateDaysBetween(data.orderDate, data.vinReceivedDate),
-    orderToDelivery: calculateDaysBetween(data.orderDate, data.deliveryDate),
-    orderToPapers: calculateDaysBetween(data.orderDate, data.papersReceivedDate),
-    papersToDelivery: calculateDaysBetween(data.papersReceivedDate, data.deliveryDate),
-  }
-}
+export { parseGermanDate, calculateDaysBetween, calculateTimePeriods } from './date-utils'
 
 // Fields to select for API responses (excludes editCode for security)
 export const orderSelectFields = {

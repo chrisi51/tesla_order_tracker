@@ -644,7 +644,7 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
   }
 }
 
-export function getOrderStatus(order: Order): 'ordered' | 'vin_received' | 'papers_received' | 'delivery_scheduled' | 'delivered' {
+export function getOrderStatus(order: Order): 'ordered' | 'vin_received' | 'production' | 'papers_received' | 'delivery_scheduled' | 'delivered' {
   if (order.deliveryDate) {
     // Check if delivery date is in the future
     const parts = order.deliveryDate.split('.')
@@ -660,6 +660,7 @@ export function getOrderStatus(order: Order): 'ordered' | 'vin_received' | 'pape
     return 'delivered'
   }
   if (order.papersReceivedDate) return 'papers_received'
+  if (order.productionDate) return 'production'
   if (order.vinReceivedDate || order.vin) return 'vin_received'
   return 'ordered'
 }
@@ -667,9 +668,10 @@ export function getOrderStatus(order: Order): 'ordered' | 'vin_received' | 'pape
 export function getStatusProgress(order: Order): number {
   const status = getOrderStatus(order)
   switch (status) {
-    case 'ordered': return 25
-    case 'vin_received': return 50
-    case 'papers_received': return 75
+    case 'ordered': return 20
+    case 'vin_received': return 40
+    case 'production': return 60
+    case 'papers_received': return 80
     case 'delivery_scheduled': return 90
     case 'delivered': return 100
   }

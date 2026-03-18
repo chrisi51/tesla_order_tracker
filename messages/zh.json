@@ -252,6 +252,7 @@
     "ordered": "已下单",
     "vinReceived": "已收到 VIN",
     "papers": "文件",
+    "production": "生产",
     "delivered": "已交付",
     "deliveryScheduled": "交付已安排"
   },

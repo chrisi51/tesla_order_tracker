@@ -5,24 +5,26 @@ import { Order } from '@/lib/types'
 import { getOrderStatus } from '@/lib/statistics'
 import { useTranslations } from 'next-intl'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ShoppingCart, Hash, FileText, Car, Check, Calendar } from 'lucide-react'
+import { ShoppingCart, Hash, Factory, FileText, Car, Check, Calendar } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const STEPS = [
   { key: 'ordered', labelKey: 'ordered', icon: ShoppingCart, dateField: 'orderDate' as const },
   { key: 'vin_received', labelKey: 'vinReceived', icon: Hash, dateField: 'vinReceivedDate' as const },
+  { key: 'production', labelKey: 'production', icon: Factory, dateField: 'productionDate' as const },
   { key: 'papers_received', labelKey: 'papers', icon: FileText, dateField: 'papersReceivedDate' as const },
   { key: 'delivered', labelKey: 'delivered', icon: Car, dateField: 'deliveryDate' as const },
 ]
 
-type StepKey = 'ordered' | 'vin_received' | 'papers_received' | 'delivery_scheduled' | 'delivered'
+type StepKey = 'ordered' | 'vin_received' | 'production' | 'papers_received' | 'delivery_scheduled' | 'delivered'
 
 const STEP_INDEX: Record<StepKey, number> = {
   ordered: 0,
   vin_received: 1,
-  papers_received: 2,
-  delivery_scheduled: 3,
-  delivered: 3,
+  production: 2,
+  papers_received: 3,
+  delivery_scheduled: 4,
+  delivered: 4,
 }
 
 interface ProgressTimelineProps {
@@ -38,7 +40,7 @@ export function ProgressTimeline({ order }: ProgressTimelineProps) {
   const isScheduled = currentStatus === 'delivery_scheduled'
   const isDelivered = currentStatus === 'delivered'
 
-  const progressValue = (currentIndex + 1) * 25
+  const progressValue = (currentIndex + 1) * 20
 
   return (
     <div

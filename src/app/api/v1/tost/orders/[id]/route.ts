@@ -4,6 +4,7 @@ import { withTostAuth } from '@/lib/tost-auth'
 import { RouteContext } from '@/lib/api-auth'
 import { createApiSuccessResponse, ApiErrors } from '@/lib/api-response'
 import { calculateTimePeriods } from '@/lib/tost-helpers'
+import { normalizeDateFields } from '@/lib/date-utils'
 import { trackApiEvent } from '@/lib/umami'
 
 // DELETE /api/v1/tost/orders/[id] - Delete a TOST-owned order
@@ -62,6 +63,9 @@ export const PUT = withTostAuth(
       }
 
       // Optimistic locking skipped — TOST is the source of truth for its own orders
+
+      // Normalize date fields
+      normalizeDateFields(body)
 
       // Build update data from provided fields
       const updateData: Record<string, unknown> = {}

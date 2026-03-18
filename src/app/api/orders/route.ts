@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminFromCookie } from '@/lib/auth'
-import { parse, differenceInDays, isValid } from 'date-fns'
 import bcrypt from 'bcryptjs'
+import { normalizeDateFields, calculateTimePeriods, calculateDaysBetween } from '@/lib/date-utils'
 import {
   MODEL_3_TOW_HITCH_AVAILABLE,
   COLORS,
@@ -66,21 +66,6 @@ async function comparePassword(input: string, stored: string): Promise<boolean> 
   return input === stored
 }
 
-// Helper to parse German date format (DD.MM.YYYY) and calculate days between dates
-function parseGermanDate(dateStr: string | null | undefined): Date | null {
-  if (!dateStr) return null
-  // Use fixed reference date to avoid timezone issues around midnight
-  const parsed = parse(dateStr, 'dd.MM.yyyy', new Date(2000, 0, 1))
-  return isValid(parsed) ? parsed : null
-}
-
-function calculateDaysBetween(fromDate: string | null | undefined, toDate: string | null | undefined): number | null {
-  const from = parseGermanDate(fromDate)
-  const to = parseGermanDate(toDate)
-  if (!from || !to) return null
-  return differenceInDays(to, from)
-}
-
 // Apply Model 3 constraints - set unavailable options to "-"
 function applyModel3Constraints(data: Record<string, unknown>): Record<string, unknown> {
   if (data.vehicleType !== 'Model 3') return data
@@ -104,23 +89,6 @@ function applyModel3Constraints(data: Record<string, unknown>): Record<string, u
   }
 
   return result
-}
-
-// Calculate all time period fields from dates
-function calculateTimePeriods(data: {
-  orderDate?: string | null
-  productionDate?: string | null
-  vinReceivedDate?: string | null
-  deliveryDate?: string | null
-  papersReceivedDate?: string | null
-}) {
-  return {
-    orderToProduction: calculateDaysBetween(data.orderDate, data.productionDate),
-    orderToVin: calculateDaysBetween(data.orderDate, data.vinReceivedDate),
-    orderToDelivery: calculateDaysBetween(data.orderDate, data.deliveryDate),
-    orderToPapers: calculateDaysBetween(data.orderDate, data.papersReceivedDate),
-    papersToDelivery: calculateDaysBetween(data.papersReceivedDate, data.deliveryDate),
-  }
 }
 
 export async function GET(request: NextRequest) {
@@ -284,6 +252,9 @@ export async function POST(request: NextRequest) {
     // Normalize display labels → internal values
     const normalizedBody = normalizeOrderData(body)
 
+    // Normalize date fields (fix missing leading zeros, reject garbage)
+    normalizeDateFields(normalizedBody)
+
     // Calculate time periods from dates
     const timePeriods = calculateTimePeriods(normalizedBody)
 
@@ -337,6 +308,9 @@ export async function PUT(request: NextRequest) {
 
     // Normalize display labels → internal values
     const data = normalizeOrderData(rawData) as typeof rawData
+
+    // Normalize date fields
+    normalizeDateFields(data)
 
     const admin = await getAdminFromCookie()
 

@@ -252,6 +252,7 @@
     "ordered": "Sipariş verildi",
     "vinReceived": "VIN alındı",
     "papers": "Belgeler",
+    "production": "Üretim",
     "delivered": "Teslim edildi",
     "deliveryScheduled": "Teslimat planlandı"
   },

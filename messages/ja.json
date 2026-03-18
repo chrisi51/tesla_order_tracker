@@ -252,6 +252,7 @@
     "ordered": "注文済み",
     "vinReceived": "VIN 受信済み",
     "papers": "書類",
+    "production": "生産",
     "delivered": "納車済み",
     "deliveryScheduled": "納車予定"
   },

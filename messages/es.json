@@ -252,6 +252,7 @@
     "ordered": "Pedido realizado",
     "vinReceived": "VIN recibido",
     "papers": "Documentos",
+    "production": "Producción",
     "delivered": "Entregado",
     "deliveryScheduled": "Entrega programada"
   },

@@ -252,6 +252,7 @@
     "ordered": "주문 완료",
     "vinReceived": "VIN 수신 완료",
     "papers": "서류",
+    "production": "생산",
     "delivered": "인도 완료",
     "deliveryScheduled": "인도 예정"
   },

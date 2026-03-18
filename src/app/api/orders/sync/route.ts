@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminFromCookie } from '@/lib/auth'
 import { SyncResult } from '@/lib/types'
+import { normalizeDate } from '@/lib/date-utils'
 
 const SPREADSHEET_ID = '1--3lNLMSUDwxgcpqrYh4Fbz8LONLBfbJwOIftKgzaSA'
 
@@ -292,7 +293,7 @@ async function syncSheet(gid: string, label: string, isQ3: boolean = false): Pro
 
     const orderData = {
       name,
-      orderDate,
+      orderDate: normalizeDate(orderDate),
       country: normalizeCountry(cleanValue(row[cols.country])),
       model: cleanValue(row[cols.model])?.toLowerCase() || null,  // Normalize to lowercase
       drive: normalizeDrive(cleanValue(row[cols.drive])),
@@ -304,12 +305,12 @@ async function syncSheet(gid: string, label: string, isQ3: boolean = false): Pro
       deliveryWindow: cleanValue(row[cols.deliveryWindow]),
       deliveryLocation: cleanValue(row[cols.deliveryLocation]),
       vin: cleanValue(row[cols.vin]),
-      vinReceivedDate: cleanValue(row[cols.vinReceivedDate]),
-      papersReceivedDate: cleanValue(row[cols.papersReceivedDate]),
-      productionDate: cleanValue(row[cols.productionDate]),
+      vinReceivedDate: normalizeDate(cleanValue(row[cols.vinReceivedDate])),
+      papersReceivedDate: normalizeDate(cleanValue(row[cols.papersReceivedDate])),
+      productionDate: normalizeDate(cleanValue(row[cols.productionDate])),
       typeApproval: cleanValue(row[cols.typeApproval]),
       typeVariant: cleanValue(row[cols.typeVariant]),
-      deliveryDate: cleanValue(row[cols.deliveryDate]),
+      deliveryDate: normalizeDate(cleanValue(row[cols.deliveryDate])),
       orderToProduction: parseNumber(row[cols.orderToProduction]),
       orderToVin: parseNumber(row[cols.orderToVin]),
       orderToDelivery: parseNumber(row[cols.orderToDelivery]),
