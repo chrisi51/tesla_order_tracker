@@ -1,5 +1,5 @@
 import { Order, MODEL_Y_TRIMS, MODEL_3_TRIMS, COLORS, DRIVES, COUNTRIES } from './types'
-import { parseGermanDate, calculateDaysBetween } from './statistics'
+import { parseGermanDate, calculateDaysBetween, getOrderStatus } from './statistics'
 
 // Resolve internal value to display label
 function resolveLabel(value: string, dimension: 'model' | 'color' | 'drive' | 'country'): string {
@@ -75,13 +75,36 @@ function median(values: number[]): number {
     : sorted[mid]
 }
 
+// Determine which pipeline segment to predict from, based on current order status.
+// Returns the "from" date field, "from" date value, and a label for that segment.
+function getSegment(order: Order): { fromField: 'productionDate' | 'papersReceivedDate' | 'vinReceivedDate' | 'orderDate'; fromDate: string; segmentLabel: string } | null {
+  const status = getOrderStatus(order)
+
+  // Pick the latest known milestone as the reference point
+  if ((status === 'papers_received' || status === 'delivery_scheduled') && order.papersReceivedDate) {
+    return { fromField: 'papersReceivedDate', fromDate: order.papersReceivedDate, segmentLabel: 'papers→delivery' }
+  }
+  if (status === 'production' && order.productionDate) {
+    return { fromField: 'productionDate', fromDate: order.productionDate, segmentLabel: 'production→delivery' }
+  }
+  if (status === 'vin_received' && order.vinReceivedDate) {
+    return { fromField: 'vinReceivedDate', fromDate: order.vinReceivedDate, segmentLabel: 'vin→delivery' }
+  }
+  if (order.orderDate) {
+    return { fromField: 'orderDate', fromDate: order.orderDate, segmentLabel: 'order→delivery' }
+  }
+  return null
+}
+
 export function predictDelivery(
   orders: Order[],
   vehicleType: string,
   model?: string,
   country?: string,
   drive?: string,
-  orderDate?: string
+  orderDate?: string,
+  /** Pass the full order to enable status-aware "remaining time" prediction */
+  currentOrder?: Order,
 ): DeliveryPrediction | null {
   const filtersUsed: string[] = []
 
@@ -104,11 +127,37 @@ export function predictDelivery(
     filtersUsed.push(drive)
   }
 
-  // Calculate delivery days
-  const deliveryDays = candidates
-    .map(o => calculateDaysBetween(o.orderDate, o.deliveryDate))
-    .filter((d): d is number => d !== null)
-    .sort((a, b) => a - b)
+  // Dynamic segment: if a current order is provided and has progressed past "ordered",
+  // predict remaining time from the latest milestone instead of from order date.
+  const segment = currentOrder ? getSegment(currentOrder) : null
+  const useSegment = segment && segment.fromField !== 'orderDate'
+
+  let deliveryDays: number[]
+  let refDate: Date
+
+  if (useSegment) {
+    // Calculate segment durations from similar delivered orders
+    deliveryDays = candidates
+      .map(o => {
+        const fromVal = o[segment.fromField]
+        return fromVal ? calculateDaysBetween(fromVal, o.deliveryDate) : null
+      })
+      .filter((d): d is number => d !== null && d >= 0)
+      .sort((a, b) => a - b)
+
+    // Reference date = the milestone date on the current order
+    refDate = parseGermanDate(segment.fromDate) || new Date()
+    filtersUsed.push(segment.segmentLabel)
+  } else {
+    // Default: order date → delivery date
+    deliveryDays = candidates
+      .map(o => calculateDaysBetween(o.orderDate, o.deliveryDate))
+      .filter((d): d is number => d !== null)
+      .sort((a, b) => a - b)
+
+    const baseDate = orderDate ? parseGermanDate(orderDate) : new Date()
+    refDate = baseDate || new Date()
+  }
 
   if (deliveryDays.length < 3) return null
 
@@ -118,9 +167,6 @@ export function predictDelivery(
 
   const confidence: DeliveryPrediction['confidence'] =
     deliveryDays.length >= 30 ? 'high' : deliveryDays.length >= 10 ? 'medium' : 'low'
-
-  const baseDate = orderDate ? parseGermanDate(orderDate) : new Date()
-  const refDate = baseDate || new Date()
 
   return {
     optimisticDays: p25,

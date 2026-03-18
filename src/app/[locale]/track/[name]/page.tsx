@@ -184,7 +184,7 @@ export default async function TrackPage({ params, searchParams }: { params: Prom
   const countryInfo = findCountryInfo(order.country)
   const status = getOrderStatus(order)
 
-  // Delivery prediction
+  // Delivery prediction — status-aware: predicts remaining time from current milestone
   const prediction = predictDelivery(
     orders,
     order.vehicleType,
@@ -192,6 +192,7 @@ export default async function TrackPage({ params, searchParams }: { params: Prom
     order.country ?? undefined,
     order.drive ?? undefined,
     order.orderDate ?? undefined,
+    order,
   )
 
   // Similar orders with progressive relaxation
