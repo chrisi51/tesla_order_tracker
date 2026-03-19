@@ -253,7 +253,8 @@ export interface SegmentStats {
 }
 
 function calculateSegmentStats(values: (number | null)[]): SegmentStats {
-  const validValues = values.filter((v): v is number => v !== null && !isNaN(v) && v >= 0)
+  // Exclude 0-day values — they indicate same-day entries (data quality issues)
+  const validValues = values.filter((v): v is number => v !== null && !isNaN(v) && v > 0)
   if (validValues.length === 0) return { avg: null, min: null, max: null, count: 0 }
   const sum = validValues.reduce((acc, val) => acc + val, 0)
   return {
