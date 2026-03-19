@@ -93,13 +93,18 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
         ))}
       </div>
 
-      {/* Total waiting time */}
-      {stats.avgOrderToDelivery !== null && (
-        <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
-          <span className="text-sm font-medium text-muted-foreground">{t('totalWaitTime')}</span>
-          <span className="text-sm font-bold tabular-nums">{formatDays(stats.avgOrderToDelivery)}</span>
-        </div>
-      )}
+      {/* Total waiting time — sum of segment averages for consistency */}
+      {(() => {
+        const segmentAvgs = segments.map(s => s.days).filter((d): d is number => d !== null)
+        if (segmentAvgs.length === 0) return null
+        const total = segmentAvgs.reduce((sum, d) => sum + d, 0)
+        return (
+          <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
+            <span className="text-sm font-medium text-muted-foreground">{t('totalWaitTime')}</span>
+            <span className="text-sm font-bold tabular-nums">{formatDays(total)}</span>
+          </div>
+        )
+      })()}
 
       {/* Detail section with min/max */}
       {hasDetailData && (
