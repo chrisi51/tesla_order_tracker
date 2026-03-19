@@ -344,7 +344,9 @@
     "timelineProduction": "Производство",
     "timelinePapers": "Документи",
     "timelineDelivery": "Доставка",
-    "totalWaitTime": "Общо време на чакане"
+    "totalWaitTime": "Общо време на чакане",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Административен панел",

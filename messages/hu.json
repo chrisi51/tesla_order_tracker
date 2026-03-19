@@ -344,7 +344,9 @@
     "timelineProduction": "Gyártás",
     "timelinePapers": "Dokumentumok",
     "timelineDelivery": "Kiszállítás",
-    "totalWaitTime": "Teljes várakozási idő"
+    "totalWaitTime": "Teljes várakozási idő",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Rendszergazdai kezelőpanel",

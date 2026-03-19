@@ -344,7 +344,9 @@
     "timelineProduction": "Producție",
     "timelinePapers": "Documente",
     "timelineDelivery": "Livrare",
-    "totalWaitTime": "Timp total de așteptare"
+    "totalWaitTime": "Timp total de așteptare",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Panou de administrare",

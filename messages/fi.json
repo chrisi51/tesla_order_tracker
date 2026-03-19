@@ -344,7 +344,9 @@
     "timelineProduction": "Tuotanto",
     "timelinePapers": "Asiakirjat",
     "timelineDelivery": "Toimitus",
-    "totalWaitTime": "Kokonaisodotusaika"
+    "totalWaitTime": "Kokonaisodotusaika",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Ylläpidon hallintapaneeli",

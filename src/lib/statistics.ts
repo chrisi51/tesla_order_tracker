@@ -71,6 +71,12 @@ export interface OrderStatistics {
   vinsThisWeek: number
   avgVinToProduction: number | null
   avgProductionToPapers: number | null
+  // Segment detail stats (avg/min/max)
+  segmentOrderToVin: SegmentStats
+  segmentVinToProduction: SegmentStats
+  segmentProductionToPapers: SegmentStats
+  segmentPapersToDelivery: SegmentStats
+  segmentOrderToDelivery: SegmentStats
 }
 
 // Period filter types
@@ -238,6 +244,25 @@ function calculateAverage(values: (number | null)[]): number | null {
   if (validValues.length === 0) return null
   const sum = validValues.reduce((acc, val) => acc + val, 0)
   return Math.round(sum / validValues.length)
+}
+
+export interface SegmentStats {
+  avg: number | null
+  min: number | null
+  max: number | null
+  count: number
+}
+
+function calculateSegmentStats(values: (number | null)[]): SegmentStats {
+  const validValues = values.filter((v): v is number => v !== null && !isNaN(v) && v >= 0)
+  if (validValues.length === 0) return { avg: null, min: null, max: null, count: 0 }
+  const sum = validValues.reduce((acc, val) => acc + val, 0)
+  return {
+    avg: Math.round(sum / validValues.length),
+    min: Math.min(...validValues),
+    max: Math.max(...validValues),
+    count: validValues.length,
+  }
 }
 
 export function parseGermanDate(dateStr: string | null): Date | null {
@@ -611,6 +636,23 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     deliveredOrdersList.map(o => calculateDaysBetween(o.productionDate, o.papersReceivedDate))
   )
 
+  // Segment detail stats (avg/min/max for each pipeline segment)
+  const segmentOrderToVin = calculateSegmentStats(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.orderDate, o.vinReceivedDate))
+  )
+  const segmentVinToProduction = calculateSegmentStats(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.vinReceivedDate, o.productionDate))
+  )
+  const segmentProductionToPapers = calculateSegmentStats(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.productionDate, o.papersReceivedDate))
+  )
+  const segmentPapersToDelivery = calculateSegmentStats(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.papersReceivedDate, o.deliveryDate))
+  )
+  const segmentOrderToDelivery = calculateSegmentStats(
+    deliveredOrdersList.map(o => calculateDaysBetween(o.orderDate, o.deliveryDate))
+  )
+
   return {
     totalOrders,
     deliveredOrders,
@@ -641,6 +683,11 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     vinsThisWeek,
     avgVinToProduction,
     avgProductionToPapers,
+    segmentOrderToVin,
+    segmentVinToProduction,
+    segmentProductionToPapers,
+    segmentPapersToDelivery,
+    segmentOrderToDelivery,
   }
 }
 

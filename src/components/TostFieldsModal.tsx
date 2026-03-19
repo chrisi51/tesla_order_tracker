@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Order } from '@/lib/types'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -24,6 +24,17 @@ export function TostFieldsModal({ order, onClose, onSave }: TostFieldsModalProps
   const [typeVariant, setTypeVariant] = useState(order?.typeVariant || '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Sync state when a different order is opened
+  useEffect(() => {
+    if (order) {
+      setOrderDate(order.orderDate || '')
+      setPapersReceivedDate(order.papersReceivedDate || '')
+      setTypeApproval(order.typeApproval || '')
+      setTypeVariant(order.typeVariant || '')
+      setError(null)
+    }
+  }, [order])
 
   if (!order) return null
 

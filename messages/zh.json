@@ -344,7 +344,9 @@
     "timelineProduction": "生产",
     "timelinePapers": "文件",
     "timelineDelivery": "交付",
-    "totalWaitTime": "总等待时间"
+    "totalWaitTime": "总等待时间",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "管理员仪表板",

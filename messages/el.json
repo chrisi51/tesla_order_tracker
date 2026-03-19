@@ -344,7 +344,9 @@
     "timelineProduction": "Παραγωγή",
     "timelinePapers": "Έγγραφα",
     "timelineDelivery": "Παράδοση",
-    "totalWaitTime": "Συνολικός χρόνος αναμονής"
+    "totalWaitTime": "Συνολικός χρόνος αναμονής",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Πίνακας Ελέγχου Διαχειριστή",

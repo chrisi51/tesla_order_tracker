@@ -344,7 +344,9 @@
     "timelineProduction": "Produksjon",
     "timelinePapers": "Papirer",
     "timelineDelivery": "Levering",
-    "totalWaitTime": "Total ventetid"
+    "totalWaitTime": "Total ventetid",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Administrasjonspanel",

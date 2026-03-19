@@ -344,7 +344,9 @@
     "timelineProduction": "製造",
     "timelinePapers": "書類",
     "timelineDelivery": "納車",
-    "totalWaitTime": "合計待ち時間"
+    "totalWaitTime": "合計待ち時間",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "管理者ダッシュボード",

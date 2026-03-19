@@ -344,7 +344,9 @@
     "timelineProduction": "Productie",
     "timelinePapers": "Papieren",
     "timelineDelivery": "Levering",
-    "totalWaitTime": "Totale wachttijd"
+    "totalWaitTime": "Totale wachttijd",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Beheerdersdashboard",

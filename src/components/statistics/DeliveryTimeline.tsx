@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { OrderStatistics } from '@/lib/statistics'
+import { OrderStatistics, SegmentStats } from '@/lib/statistics'
+import { ChevronDown } from 'lucide-react'
 
 interface DeliveryTimelineProps {
   stats: OrderStatistics
@@ -14,6 +16,7 @@ interface Segment {
 export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
   const t = useTranslations('statistics')
   const tc = useTranslations('common')
+  const [detailOpen, setDetailOpen] = useState(false)
 
   const nodes = [
     { label: t('timelineOrder') },
@@ -30,8 +33,21 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
     { days: stats.avgPapersToDelivery },
   ]
 
+  const detailSegments: { label: string; segment: SegmentStats }[] = [
+    { label: `${t('timelineOrder')} → ${t('timelineVin')}`, segment: stats.segmentOrderToVin },
+    { label: `${t('timelineVin')} → ${t('timelineProduction')}`, segment: stats.segmentVinToProduction },
+    { label: `${t('timelineProduction')} → ${t('timelinePapers')}`, segment: stats.segmentProductionToPapers },
+    { label: `${t('timelinePapers')} → ${t('timelineDelivery')}`, segment: stats.segmentPapersToDelivery },
+    { label: `${t('timelineOrder')} → ${t('timelineDelivery')}`, segment: stats.segmentOrderToDelivery },
+  ]
+
   const formatDays = (days: number | null) =>
     days !== null ? `${days} ${tc('days')}` : '–'
+
+  const formatDaysShort = (days: number | null) =>
+    days !== null ? `${days}` : '–'
+
+  const hasDetailData = detailSegments.some(s => s.segment.count > 0)
 
   return (
     <div className="rounded-xl border bg-card p-4 sm:p-6">
@@ -83,6 +99,49 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
         <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
           <span className="text-sm font-medium text-muted-foreground">{t('totalWaitTime')}</span>
           <span className="text-sm font-bold tabular-nums">{formatDays(stats.avgOrderToDelivery)}</span>
+        </div>
+      )}
+
+      {/* Detail section with min/max */}
+      {hasDetailData && (
+        <div className="mt-3">
+          <button
+            onClick={() => setDetailOpen(!detailOpen)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${detailOpen ? 'rotate-180' : ''}`} />
+            {t('pipelineDetail')}
+          </button>
+
+          {detailOpen && (
+            <div className="mt-3 space-y-0">
+              {/* Header */}
+              <div className="grid grid-cols-[1fr_repeat(4,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 pb-1.5 border-b border-border/50">
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{t('pipelineSegment')}</span>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Ø</span>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Min</span>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Max</span>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">n</span>
+              </div>
+              {/* Rows */}
+              {detailSegments.map((item) => {
+                if (item.segment.count === 0) return null
+                const isTotal = item === detailSegments[detailSegments.length - 1]
+                return (
+                  <div
+                    key={item.label}
+                    className={`grid grid-cols-[1fr_repeat(4,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 py-1.5 ${isTotal ? 'border-t border-border/50 mt-0.5 font-semibold' : ''}`}
+                  >
+                    <span className={`text-xs ${isTotal ? 'text-foreground' : 'text-muted-foreground'} truncate`}>{item.label}</span>
+                    <span className="text-xs tabular-nums text-right text-foreground">{formatDaysShort(item.segment.avg)}</span>
+                    <span className="text-xs tabular-nums text-right text-green-600 dark:text-green-400">{formatDaysShort(item.segment.min)}</span>
+                    <span className="text-xs tabular-nums text-right text-red-500 dark:text-red-400">{formatDaysShort(item.segment.max)}</span>
+                    <span className="text-xs tabular-nums text-right text-muted-foreground">{item.segment.count}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

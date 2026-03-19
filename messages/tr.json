@@ -344,7 +344,9 @@
     "timelineProduction": "Üretim",
     "timelinePapers": "Belgeler",
     "timelineDelivery": "Teslimat",
-    "totalWaitTime": "Toplam bekleme süresi"
+    "totalWaitTime": "Toplam bekleme süresi",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Yönetici Paneli",

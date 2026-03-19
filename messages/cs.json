@@ -344,7 +344,9 @@
     "timelineProduction": "Výroba",
     "timelinePapers": "Dokumenty",
     "timelineDelivery": "Dodání",
-    "totalWaitTime": "Celková čekací doba"
+    "totalWaitTime": "Celková čekací doba",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Administrátorský panel",

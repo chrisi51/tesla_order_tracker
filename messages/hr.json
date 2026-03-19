@@ -344,7 +344,9 @@
     "timelineProduction": "Proizvodnja",
     "timelinePapers": "Dokumenti",
     "timelineDelivery": "Isporuka",
-    "totalWaitTime": "Ukupno vrijeme čekanja"
+    "totalWaitTime": "Ukupno vrijeme čekanja",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Administratorska ploča",

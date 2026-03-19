@@ -344,7 +344,9 @@
     "timelineProduction": "Produção",
     "timelinePapers": "Documentos",
     "timelineDelivery": "Entrega",
-    "totalWaitTime": "Tempo total de espera"
+    "totalWaitTime": "Tempo total de espera",
+    "pipelineDetail": "Detail (Min / Max)",
+    "pipelineSegment": "Segment"
   },
   "admin": {
     "dashboard": "Painel de administração",
