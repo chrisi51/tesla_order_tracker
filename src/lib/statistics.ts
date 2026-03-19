@@ -76,7 +76,6 @@ export interface OrderStatistics {
   segmentVinToProduction: SegmentStats
   segmentProductionToPapers: SegmentStats
   segmentPapersToDelivery: SegmentStats
-  segmentOrderToDelivery: SegmentStats
 }
 
 // Period filter types
@@ -649,9 +648,6 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
   const segmentPapersToDelivery = calculateSegmentStats(
     deliveredOrdersList.map(o => calculateDaysBetween(o.papersReceivedDate, o.deliveryDate))
   )
-  const segmentOrderToDelivery = calculateSegmentStats(
-    deliveredOrdersList.map(o => calculateDaysBetween(o.orderDate, o.deliveryDate))
-  )
 
   return {
     totalOrders,
@@ -687,7 +683,6 @@ export function calculateStatistics(orders: Order[], period?: StatsPeriod, vehic
     segmentVinToProduction,
     segmentProductionToPapers,
     segmentPapersToDelivery,
-    segmentOrderToDelivery,
   }
 }
 

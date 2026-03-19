@@ -38,7 +38,6 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
     { label: `${t('timelineVin')} → ${t('timelineProduction')}`, segment: stats.segmentVinToProduction },
     { label: `${t('timelineProduction')} → ${t('timelinePapers')}`, segment: stats.segmentProductionToPapers },
     { label: `${t('timelinePapers')} → ${t('timelineDelivery')}`, segment: stats.segmentPapersToDelivery },
-    { label: `${t('timelineOrder')} → ${t('timelineDelivery')}`, segment: stats.segmentOrderToDelivery },
   ]
 
   const formatDays = (days: number | null) =>
@@ -116,27 +115,24 @@ export function DeliveryTimeline({ stats }: DeliveryTimelineProps) {
           {detailOpen && (
             <div className="mt-3 space-y-0">
               {/* Header */}
-              <div className="grid grid-cols-[1fr_repeat(4,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 pb-1.5 border-b border-border/50">
+              <div className="grid grid-cols-[1fr_repeat(3,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 pb-1.5 border-b border-border/50">
                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{t('pipelineSegment')}</span>
                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Ø</span>
                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Min</span>
                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">Max</span>
-                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider text-right">n</span>
               </div>
               {/* Rows */}
               {detailSegments.map((item) => {
                 if (item.segment.count === 0) return null
-                const isTotal = item === detailSegments[detailSegments.length - 1]
                 return (
                   <div
                     key={item.label}
-                    className={`grid grid-cols-[1fr_repeat(4,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 py-1.5 ${isTotal ? 'border-t border-border/50 mt-0.5 font-semibold' : ''}`}
+                    className="grid grid-cols-[1fr_repeat(3,_minmax(0,_auto))] gap-x-3 sm:gap-x-4 px-2 py-1.5"
                   >
-                    <span className={`text-xs ${isTotal ? 'text-foreground' : 'text-muted-foreground'} truncate`}>{item.label}</span>
+                    <span className="text-xs text-muted-foreground truncate">{item.label}</span>
                     <span className="text-xs tabular-nums text-right text-foreground">{formatDaysShort(item.segment.avg)}</span>
                     <span className="text-xs tabular-nums text-right text-green-600 dark:text-green-400">{formatDaysShort(item.segment.min)}</span>
                     <span className="text-xs tabular-nums text-right text-red-500 dark:text-red-400">{formatDaysShort(item.segment.max)}</span>
-                    <span className="text-xs tabular-nums text-right text-muted-foreground">{item.segment.count}</span>
                   </div>
                 )
               })}
